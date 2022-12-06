@@ -9,5 +9,4 @@ public class MediappBackendSpringboot3Application {
     public static void main(String[] args) {
         SpringApplication.run(MediappBackendSpringboot3Application.class, args);
     }
-
 }
