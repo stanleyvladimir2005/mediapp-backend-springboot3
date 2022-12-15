@@ -27,8 +27,7 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-hateoas'
     implementation 'org.springframework.boot:spring-boot-starter-mail'
     implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
-    implementation 'org.springdoc:springdoc-openapi-ui:1.6.13'
-    implementation 'org.springdoc:springdoc-openapi-security:1.6.13'
+    implementation 'org.springdoc:springdoc-openapi-starter-webmvc-ui:2.0.0'
     implementation 'net.sf.jasperreports:jasperreports:6.20.0'
     implementation 'com.lowagie:itext:2.1.7' //Versiones superiores no funcionan
     compileOnly 'org.projectlombok:lombok'
