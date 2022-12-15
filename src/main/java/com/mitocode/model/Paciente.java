@@ -19,11 +19,11 @@ public class Paciente {
 	private Integer idPaciente;
 	
 	@Size(min = 3, message = "{first_name.size}")
-	@Column(name = "nombres", nullable = true, length = 70)
+	@Column(name = "nombres", length = 70)
 	private String nombres;
 
 	@Size(min = 3, message = "{last_name.size}")
-	@Column(name = "apellidos", nullable = true, length = 70)
+	@Column(name = "apellidos", length = 70)
 	private String apellidos;
 
 	@Size(min = 9, max = 9, message = "{dui.size}")
