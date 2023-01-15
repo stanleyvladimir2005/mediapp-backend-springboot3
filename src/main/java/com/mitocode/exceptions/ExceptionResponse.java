@@ -1,19 +1,14 @@
 package com.mitocode.exceptions;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
-import java.util.Date;
+import java.time.LocalDateTime;
 
 @Data
+@AllArgsConstructor
 public class ExceptionResponse {
 
-	private Date timestamp;
-	private String mensaje;
-	private String detalles;
-	
-	public ExceptionResponse(Date timestamp, String mensaje, String detalles) {
-		super();
-		this.timestamp = timestamp;
-		this.mensaje = mensaje;
-		this.detalles = detalles;
-	}
+	private LocalDateTime dateTime;
+	private String message;
+	private String details;
 }

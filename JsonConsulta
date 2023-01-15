@@ -1,0 +1,26 @@
+{
+  "consult" :
+   {
+     "patient": {
+                  "idPatient":1
+                 },
+     "medic":   {
+                  "idMedic":1
+                 },
+     "speciality": {
+                      "idSpeciality":1
+                     },
+     "numberConsult": "C1",
+     "consultDate": "2023-01-14T23:03:00.000Z",
+     "details": [
+       {
+         "diagnosis": "Covid19", "treatment": "Acetaminofen C/8 Horas"
+       }
+     ]
+   },
+  "listExam": [
+      {
+       "idExam":1
+      }
+  ]
+}
