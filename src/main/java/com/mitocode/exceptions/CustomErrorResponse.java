@@ -6,7 +6,7 @@ import java.time.LocalDateTime;
 
 @Data
 @AllArgsConstructor
-public class ExceptionResponse {
+public class CustomErrorResponse {
 
 	private LocalDateTime dateTime;
 	private String message;

@@ -1,19 +1,15 @@
 package com.mitocode.controller;
 
 import com.mitocode.dto.MedicDTO;
-import com.mitocode.dto.PatientDTO;
 import com.mitocode.exceptions.ModelNotFoundException;
 import com.mitocode.model.Medic;
-import com.mitocode.model.Patient;
 import com.mitocode.service.IMedicService;
 import org.modelmapper.ModelMapper;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.hateoas.EntityModel;
-import org.springframework.hateoas.Link;
 import org.springframework.hateoas.server.mvc.WebMvcLinkBuilder;
-
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 import static org.springframework.http.HttpStatus.OK;
 import org.springframework.http.MediaType;
@@ -24,7 +20,6 @@ import jakarta.validation.Valid;
 import java.net.URI;
 import java.util.List;
 import java.util.stream.Collectors;
-
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
 @RestController
@@ -39,23 +34,24 @@ public class MedicController {
 
 	@GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<List<MedicDTO>> findAll() {
-		List<MedicDTO> medics = service.findAll().stream().map(m -> mapper.map(m, MedicDTO.class)).collect(Collectors.toList());
+		List<MedicDTO> medics = service.findAll().stream().map(this::convertToDto).collect(Collectors.toList());
 		return new ResponseEntity<>(medics, OK);
 	}
 	
 	@PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<Object> save (@Valid @RequestBody MedicDTO medicDTO) {
-		Medic med = service.save(mapper.map(medicDTO, Medic.class));
+		Medic med = service.save(convertToEntity(medicDTO));
 		URI location = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(med.getIdMedic()).toUri();
 		return ResponseEntity.created(location).build();
 	}
 
 	@PutMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<Object> update(@RequestBody MedicDTO medicDTO) {
+	public ResponseEntity<Object> update(@Valid @RequestBody MedicDTO medicDTO) {
 		Medic med = service.findById(medicDTO.getIdMedic());
 		if (med == null)
 			throw new ModelNotFoundException("ID NOT FOUND:" +medicDTO.getIdMedic());
-		return new ResponseEntity<>(service.update(mapper.map(medicDTO, Medic.class)),OK);
+
+		return new ResponseEntity<>(service.update(convertToEntity(medicDTO)),OK);
 	}
 
 	@DeleteMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
@@ -65,6 +61,7 @@ public class MedicController {
 			throw new ModelNotFoundException("ID NOT FOUND:" + id);
 		else 
 			service.delete(id);
+
 		return new ResponseEntity<>(OK);
 	}
 	
@@ -75,14 +72,15 @@ public class MedicController {
 		if (medic == null)
 			throw new ModelNotFoundException("Not Found ID: " + id);
 		else
-			dtoResponse = mapper.map(medic, MedicDTO.class);
+			dtoResponse = convertToDto(medic);
+
 		return new ResponseEntity<>(dtoResponse, OK);
 	}
 	
 	@GetMapping(value="/pageableMedic", produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<Page<Medic>> listPageable(Pageable pageable) {
-		Page<Medic> medic = service.listPageable(pageable);
-		return new ResponseEntity<>(medic,OK);
+	public ResponseEntity<Page<MedicDTO>> listPageable(Pageable pageable) {
+		Page<MedicDTO> medicDTO = service.listPageable(pageable).map(this::convertToDto);
+		return new ResponseEntity<>(medicDTO,OK);
 	}
 
 	@GetMapping("/hateoas/{id}")
@@ -92,13 +90,21 @@ public class MedicController {
 		if (med == null)
 			throw new ModelNotFoundException("ID NOT FOUND: " + id);
 		else
-			dtoResponse = mapper.map(med, MedicDTO.class);
+			dtoResponse = convertToDto(med);
 
 		EntityModel<MedicDTO> resource = EntityModel.of(dtoResponse);
 		WebMvcLinkBuilder link1 = linkTo(methodOn(this.getClass()).findById(id));
 		WebMvcLinkBuilder link2 = linkTo(methodOn(this.getClass()).findAll());
-		resource.add(link1.withRel("patient-info1"));
-		resource.add(link2.withRel("patient-full"));
+		resource.add(link1.withRel("medic-info1"));
+		resource.add(link2.withRel("medic-full"));
 		return resource;
+	}
+
+	private MedicDTO convertToDto(Medic obj){
+		return mapper.map(obj, MedicDTO.class);
+	}
+
+	private Medic convertToEntity(MedicDTO dto){
+		return mapper.map(dto, Medic.class);
 	}
 }

@@ -2,6 +2,7 @@ package com.mitocode.dto;
 
 import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -22,15 +23,17 @@ public class PatientDTO {
     private String lastName;
 
     @NotNull
+    @Pattern(regexp = "[0-9]+")
     @Size(min = 9, max = 9, message = "{dui.size}")
     private String dui;
 
     @NotNull
-    @Size(min = 3, max = 150, message = "{direccion.size}")
+    @Size(min = 3, max = 150, message = "{address.size}")
     private String address;
 
     @NotNull
-    @Size(min = 8, max = 8, message = "{telefono.size}")
+    @Pattern(regexp = "[0-9]+")
+    @Size(min = 8, max = 8, message = "{phone.size}")
     private String phone;
 
     @Email

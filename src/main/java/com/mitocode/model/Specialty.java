@@ -8,18 +8,18 @@ import org.hibernate.annotations.Where;
 
 @Data
 @Entity
-@Table(name = "speciality")
-@SQLDelete(sql = "UPDATE speciality SET status = false WHERE id_speciality = ?")
+@Table(name = "specialty")
+@SQLDelete(sql = "UPDATE specialty SET status = false WHERE id_specialty = ?")
 @Where(clause = "status = true")
-public class Speciality {
+public class Specialty {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	private Integer idSpeciality;
+	private Integer idSpecialty;
 	
-	@Column(name = "speciality_name", nullable = false, length = 50)
+	@Column(name = "specialty_name", nullable = false, length = 50)
 	@Size(min=3, message ="{speciality_name.size}")
-	private String specialityName;
+	private String specialtyName;
 	
 	@Column(name = "status")
 	private Boolean status;

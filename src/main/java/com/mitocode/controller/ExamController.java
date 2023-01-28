@@ -34,24 +34,24 @@ public class ExamController {
 
 	@GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<List<ExamDTO>> findAll() {
-		List<ExamDTO> exam = service.findAll().stream().map(exa -> mapper.map(exa, ExamDTO.class)).collect(Collectors.toList());
+		List<ExamDTO> exam = service.findAll().stream().map(this::convertToDto).collect(Collectors.toList());
 		return new ResponseEntity<>(exam, OK);
 	}
 		
 	@PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<Object> save (@Valid @RequestBody ExamDTO examDTO) {
-		Exam exa = service.save(mapper.map(examDTO, Exam.class));
+		Exam exa = service.save(convertToEntity(examDTO));
 		URI location = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(exa.getIdExam()).toUri();
 		return ResponseEntity.created(location).build();
 	}
 
 	@PutMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<Object> update(@RequestBody ExamDTO examDTO) {
+	public ResponseEntity<Object> update(@Valid @RequestBody ExamDTO examDTO) {
         Exam exa = service.findById(examDTO.getIdExam());
 		if(exa == null)
 			throw new ModelNotFoundException("ID NOT FOUND:" +examDTO.getIdExam());
 
-		return new ResponseEntity<>(service.update(mapper.map(examDTO, Exam.class)),OK);
+		return new ResponseEntity<>(service.update(convertToEntity(examDTO)),OK);
 	}
 
 	@DeleteMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
@@ -61,6 +61,7 @@ public class ExamController {
 			throw new ModelNotFoundException("ID NOT FOUND: " + id);
 		else 
 			service.delete(id);
+
 		return new ResponseEntity<>(OK);
 	}
 	
@@ -71,14 +72,14 @@ public class ExamController {
 		if (exam == null)
 			throw new ModelNotFoundException("ID NOT FOUND: " + id);
 		else
-			dtoResponse = mapper.map(exam, ExamDTO.class);
+			dtoResponse = convertToDto(exam);
 
 		return new ResponseEntity<>(dtoResponse,OK);
 	}
 	
 	@GetMapping(value="/pageableExam", produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<Page<ExamDTO>> listPageable(Pageable pageable) {
-		Page<ExamDTO> examDTO = service.listPageable(pageable).map(exa -> mapper.map(exa, ExamDTO.class));
+		Page<ExamDTO> examDTO = service.listPageable(pageable).map(this::convertToDto);
 		return new ResponseEntity<>(examDTO, OK);
 	}
 
@@ -89,7 +90,7 @@ public class ExamController {
 		if (exa == null)
 			throw new ModelNotFoundException("ID NOT FOUND: " + id);
 		else
-			dtoResponse = mapper.map(exa, ExamDTO.class);
+			dtoResponse = convertToDto(exa);
 
 		EntityModel<ExamDTO> resource = EntityModel.of(dtoResponse);
 		WebMvcLinkBuilder link1 = linkTo(methodOn(this.getClass()).findById(id));
@@ -97,5 +98,13 @@ public class ExamController {
 		resource.add(link1.withRel("exam-info1"));
 		resource.add(link2.withRel("exam-full"));
 		return resource;
+	}
+
+	private ExamDTO convertToDto(Exam obj){
+		return mapper.map(obj, ExamDTO.class);
+	}
+
+	private Exam convertToEntity(ExamDTO dto){
+		return mapper.map(dto, Exam.class);
 	}
 }

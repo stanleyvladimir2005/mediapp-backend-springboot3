@@ -20,7 +20,7 @@ public class ConsultDTO {
     private MedicDTO medic;
 
     @NotNull
-    private SpecialityDTO speciality;
+    private SpecialtyDTO specialty;
 
     @NotNull
     private String numberConsult;

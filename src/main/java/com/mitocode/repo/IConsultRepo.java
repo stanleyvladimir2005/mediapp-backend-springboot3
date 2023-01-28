@@ -16,6 +16,6 @@ public interface IConsultRepo extends IGenericRepo <Consult, Integer> {
  @Query("from Consult c where c.consultDate between :date1 and :date2")
  List<Consult> searchByDates(@Param("date1") LocalDateTime date1, @Param("date2") LocalDateTime date2);
 
- @Query(value = "select * from fn_list", nativeQuery = true)
+ @Query(value = "select * from fn_list()", nativeQuery = true)
  List<Object[]> callProcedureOrFunction();
 }

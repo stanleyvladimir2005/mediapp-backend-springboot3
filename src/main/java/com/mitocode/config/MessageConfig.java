@@ -20,7 +20,7 @@ public class MessageConfig {
         return messageSource;
     }
 
-    // Establece x default un locale
+    // Establece un default locale
     @Bean
     public LocaleResolver localeResolver() {
         SessionLocaleResolver slr = new SessionLocaleResolver();

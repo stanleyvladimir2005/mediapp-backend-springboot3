@@ -34,13 +34,13 @@ public class PatientController {
 
 	@GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<List<PatientDTO>> findAll() {
-		List<PatientDTO> patients = service.findAll().stream().map(p -> mapper.map(p, PatientDTO.class)).collect(Collectors.toList());
+		List<PatientDTO> patients = service.findAll().stream().map(this::convertToDto).collect(Collectors.toList()); //p -> convertToDto(p))
 		return new ResponseEntity<>(patients, OK);
 	}
 	
 	@PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<Object> save(@Valid @RequestBody PatientDTO patientDTO) {
-		Patient pac = service.save(mapper.map(patientDTO, Patient.class));
+		Patient pac = service.save(convertToEntity(patientDTO));
 		URI location = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(pac.getIdPatient()).toUri();
 		return ResponseEntity.created(location).build();
 	}
@@ -51,7 +51,7 @@ public class PatientController {
 		if (pac == null)
 			throw new ModelNotFoundException("ID NOT FOUND:" +patientDTO.getIdPatient());
 
-		return new ResponseEntity<>(service.update(mapper.map(patientDTO, Patient.class)),OK);
+		return new ResponseEntity<>(service.update(convertToEntity(patientDTO)),OK);
 	}
 
 	@DeleteMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
@@ -61,6 +61,7 @@ public class PatientController {
 			throw new ModelNotFoundException("ID NOT FOUND:" + id);
 		else 
 			service.delete(id);
+
 		return new ResponseEntity<>(OK);
 	}
 	
@@ -71,25 +72,25 @@ public class PatientController {
 		if (patient == null)
 			throw new ModelNotFoundException("ID NOT FOUND:" + id);
         else
-			dtoResponse = mapper.map(patient, PatientDTO.class);
+			dtoResponse = convertToDto(patient);
 
 		return new ResponseEntity<>(dtoResponse, OK);
 	}
 	
 	@GetMapping(value="/pageablePatient", produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<Page<PatientDTO>> listPageable(Pageable pageable) {
-		Page<PatientDTO> patientsDTO = service.listPageable(pageable).map(pac -> mapper.map(pac, PatientDTO.class));
+		Page<PatientDTO> patientsDTO = service.listPageable(pageable).map(this::convertToDto);
 		return new ResponseEntity<>(patientsDTO, OK);
 	}
 
 	@GetMapping("/hateoas/{id}")
 	public EntityModel<PatientDTO> findByIdHateoas(@PathVariable("id") Integer id) {
 		PatientDTO dtoResponse;
-		Patient obj = service.findById(id);
-		if (obj == null)
+		Patient pac = service.findById(id);
+		if (pac == null)
 			throw new ModelNotFoundException("ID NOT FOUND: " + id);
 		else
-			dtoResponse = mapper.map(obj, PatientDTO.class);
+			dtoResponse = convertToDto(pac);
 
 		EntityModel<PatientDTO> resource = EntityModel.of(dtoResponse);
 		WebMvcLinkBuilder link1 = linkTo(methodOn(this.getClass()).findById(id));
@@ -97,5 +98,13 @@ public class PatientController {
 		resource.add(link1.withRel("patient-info1"));
 		resource.add(link2.withRel("patient-full"));
 		return resource;
+	}
+
+	private PatientDTO convertToDto(Patient obj){
+		return mapper.map(obj, PatientDTO.class);
+	}
+
+	private Patient convertToEntity(PatientDTO dto){
+		return mapper.map(dto, Patient.class);
 	}
 }

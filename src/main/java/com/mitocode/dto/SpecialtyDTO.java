@@ -6,13 +6,13 @@ import lombok.EqualsAndHashCode;
 
 @Data
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
-public class SpecialityDTO {
+public class SpecialtyDTO {
 
     @EqualsAndHashCode.Include
-    private Integer idSpeciality;
+    private Integer idSpecialty;
 
     @NotNull
-    private String specialityName;
+    private String specialtyName;
 
     @NotNull
     private Boolean status;

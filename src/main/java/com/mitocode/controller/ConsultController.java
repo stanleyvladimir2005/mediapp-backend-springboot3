@@ -44,13 +44,13 @@ public class ConsultController {
 
 	@GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<List<ConsultDTO>> findAll() {
-		List<ConsultDTO> consults =  service.findAll().stream().map(cons -> mapper.map(cons, ConsultDTO.class)).collect(Collectors.toList());
+		List<ConsultDTO> consults =  service.findAll().stream().map(this::convertToDto).collect(Collectors.toList());
 		return new ResponseEntity<>(consults, OK);
 	}
 		
 	@PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<Object> save(@Valid @RequestBody ConsultListExamDTO dto) {
-		Consult c = mapper.map(dto.getConsult(), Consult.class);
+		Consult c = convertToEntity(dto.getConsult());
 		List<Exam> exams = mapper.map(dto.getListExam(), new TypeToken<List<Exam>>() {}.getType());
 		Consult obj = service.saveTransactional(c, exams);
 		URI location = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(obj.getIdConsult()).toUri();
@@ -58,12 +58,12 @@ public class ConsultController {
 	}
 
 	@PutMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<Object> update(@RequestBody ConsultDTO consultDTO) {
+	public ResponseEntity<Object> update(@Valid @RequestBody ConsultDTO consultDTO) {
 		Consult cons = service.findById(consultDTO.getIdConsult());
 		if (cons == null)
 			throw new ModelNotFoundException("ID NOT FOUND:" +consultDTO.getIdConsult());
 
-		return new ResponseEntity<>(service.update(mapper.map(consultDTO, Consult.class)),OK);
+		return new ResponseEntity<>(service.update(convertToEntity(consultDTO)),OK);
 	}
 
 	@DeleteMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
@@ -73,6 +73,7 @@ public class ConsultController {
 			throw new ModelNotFoundException("ID NOT FOUND: " + id);
 		else 
 			service.delete(id);
+
 		return new ResponseEntity<>(OK);
 	}
 	
@@ -83,14 +84,14 @@ public class ConsultController {
 		if (consult == null)
 			throw new ModelNotFoundException("ID NOT FOUND: " + id);
 		else
-			dtoResponse = mapper.map(consult, ConsultDTO.class);
+			dtoResponse = convertToDto(consult);
 
 		return new ResponseEntity<>(dtoResponse, OK);
 	}
 	
 	@GetMapping(value="/pageable", produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<Page<ConsultDTO>> listPageable(Pageable pageable) {
-		Page<ConsultDTO> consultDTO  = service.listPageable(pageable).map(cons -> mapper.map(cons, ConsultDTO.class));
+		Page<ConsultDTO> consultDTO  = service.listPageable(pageable).map(this::convertToDto);
 		return new ResponseEntity<>(consultDTO, OK);
 	}
 	
@@ -160,5 +161,13 @@ public class ConsultController {
 	public ResponseEntity<byte[]> readFile(@PathVariable("idFile") Integer idFile) {
 		byte[] arr = mediaFileService.findById(idFile).getValue();
 		return new ResponseEntity<>(arr, OK);
+	}
+
+	private ConsultDTO convertToDto(Consult obj){
+		return mapper.map(obj, ConsultDTO.class);
+	}
+
+	private Consult convertToEntity(ConsultDTO dto){
+		return mapper.map(dto, Consult.class);
 	}
 }

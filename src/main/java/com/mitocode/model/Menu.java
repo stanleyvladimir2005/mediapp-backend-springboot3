@@ -23,8 +23,7 @@ public class Menu {
     private String url;
 
     @ManyToMany(fetch = FetchType.EAGER)
-    @JoinTable(name = "menu_role",
-            joinColumns = @JoinColumn(name = "id_menu", referencedColumnName = "idMenu"),
-            inverseJoinColumns = @JoinColumn(name = "id_rol", referencedColumnName = "idRol"))
+    @JoinTable(name = "menu_role", joinColumns = @JoinColumn(name = "id_menu", referencedColumnName = "idMenu"),
+               inverseJoinColumns = @JoinColumn(name = "id_rol", referencedColumnName = "idRol"))
     private List<Rol> roles;
 }
