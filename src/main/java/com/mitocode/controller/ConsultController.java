@@ -1,7 +1,6 @@
 package com.mitocode.controller;
 
 import com.mitocode.dto.*;
-import com.mitocode.exceptions.ModelNotFoundException;
 import com.mitocode.model.Consult;
 import com.mitocode.model.Exam;
 import com.mitocode.model.MediaFile;
@@ -57,36 +56,23 @@ public class ConsultController {
 		return ResponseEntity.created(location).build();			
 	}
 
-	@PutMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<Object> update(@Valid @RequestBody ConsultDTO consultDTO) {
-		Consult cons = service.findById(consultDTO.getIdConsult());
-		if (cons == null)
-			throw new ModelNotFoundException("ID NOT FOUND:" +consultDTO.getIdConsult());
-
-		return new ResponseEntity<>(service.update(convertToEntity(consultDTO)),OK);
+	@PutMapping("/{id}")
+	public ResponseEntity<ConsultDTO> update(@PathVariable("id") Integer id,@Valid @RequestBody ConsultDTO consultDTO) {
+		consultDTO.setIdConsult(id);
+		Consult cons = service.update(convertToEntity(consultDTO),id);
+		return new ResponseEntity<>(convertToDto(cons),OK);
 	}
 
 	@DeleteMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<Void> delete(@PathVariable Integer id) {
-		Consult cons = service.findById(id);
-		if (cons == null)
-			throw new ModelNotFoundException("ID NOT FOUND: " + id);
-		else 
-			service.delete(id);
-
+		service.delete(id);
 		return new ResponseEntity<>(OK);
 	}
 	
 	@GetMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<ConsultDTO> findById(@PathVariable("id") Integer id) {
-		ConsultDTO dtoResponse;
 		Consult consult = service.findById(id);
-		if (consult == null)
-			throw new ModelNotFoundException("ID NOT FOUND: " + id);
-		else
-			dtoResponse = convertToDto(consult);
-
-		return new ResponseEntity<>(dtoResponse, OK);
+		return new ResponseEntity<>(this.convertToDto(consult), OK);
 	}
 	
 	@GetMapping(value="/pageable", produces = MediaType.APPLICATION_JSON_VALUE)

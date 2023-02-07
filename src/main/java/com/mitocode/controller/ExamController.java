@@ -1,7 +1,6 @@
 package com.mitocode.controller;
 
 import com.mitocode.dto.ExamDTO;
-import com.mitocode.exceptions.ModelNotFoundException;
 import com.mitocode.model.Exam;
 import com.mitocode.service.IExamService;
 import org.modelmapper.ModelMapper;
@@ -45,36 +44,23 @@ public class ExamController {
 		return ResponseEntity.created(location).build();
 	}
 
-	@PutMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<Object> update(@Valid @RequestBody ExamDTO examDTO) {
-        Exam exa = service.findById(examDTO.getIdExam());
-		if(exa == null)
-			throw new ModelNotFoundException("ID NOT FOUND:" +examDTO.getIdExam());
-
-		return new ResponseEntity<>(service.update(convertToEntity(examDTO)),OK);
+	@PutMapping("/{id}")
+	public ResponseEntity<ExamDTO> update(@PathVariable("id") Integer id, @Valid @RequestBody ExamDTO examDTO) {
+        examDTO.setIdExam(id);
+		Exam exa = service.update(convertToEntity(examDTO), id);
+		return new ResponseEntity<>(convertToDto(exa),OK);
 	}
 
 	@DeleteMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<Void> delete(@PathVariable Integer id) {
-		Exam pac = service.findById(id);
-		if (pac == null) 
-			throw new ModelNotFoundException("ID NOT FOUND: " + id);
-		else 
-			service.delete(id);
-
+		service.delete(id);
 		return new ResponseEntity<>(OK);
 	}
 	
 	@GetMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<ExamDTO> findById(@PathVariable("id") Integer id) {
-		ExamDTO dtoResponse;
 		Exam exam = service.findById(id);
-		if (exam == null)
-			throw new ModelNotFoundException("ID NOT FOUND: " + id);
-		else
-			dtoResponse = convertToDto(exam);
-
-		return new ResponseEntity<>(dtoResponse,OK);
+		return new ResponseEntity<>(this.convertToDto(exam),OK);
 	}
 	
 	@GetMapping(value="/pageableExam", produces = MediaType.APPLICATION_JSON_VALUE)
@@ -87,11 +73,7 @@ public class ExamController {
 	public EntityModel<ExamDTO> findByIdHateoas(@PathVariable("id") Integer id) {
 		ExamDTO dtoResponse;
 		Exam exa = service.findById(id);
-		if (exa == null)
-			throw new ModelNotFoundException("ID NOT FOUND: " + id);
-		else
-			dtoResponse = convertToDto(exa);
-
+		dtoResponse = convertToDto(exa);
 		EntityModel<ExamDTO> resource = EntityModel.of(dtoResponse);
 		WebMvcLinkBuilder link1 = linkTo(methodOn(this.getClass()).findById(id));
 		WebMvcLinkBuilder link2 = linkTo(methodOn(this.getClass()).findAll());

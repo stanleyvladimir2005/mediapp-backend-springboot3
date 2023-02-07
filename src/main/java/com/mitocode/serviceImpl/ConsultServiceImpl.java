@@ -37,12 +37,7 @@ public class ConsultServiceImpl extends CRUDImpl<Consult,Integer>  implements IC
 	@Override
 	@Transactional
 	public Consult saveTransactional(Consult consult, List<Exam> exams) {
-		//Consult + ConsultDetail
-		//@JsonManagedReference y @JsonBackReference ya no requiere referencia de detalle hacia consulta
-		//consult.getDetails().forEach(det -> det.setConsult(consult));
 		repo.save(consult);
-
-		//ConsultExam
 		exams.forEach(ex -> ceRepo.register(consult.getIdConsult(), ex.getIdExam()));
 		return consult;
 	}

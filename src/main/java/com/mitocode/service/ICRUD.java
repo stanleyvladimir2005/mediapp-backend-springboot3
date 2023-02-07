@@ -8,7 +8,7 @@ public interface ICRUD<T, ID> {
 
 	T save(T t);
 
-	T update(T t);
+	T update(T t, ID id);
 
 	List<T> findAll();
 	

@@ -1,7 +1,6 @@
 package com.mitocode.controller;
 
 import com.mitocode.dto.PatientDTO;
-import com.mitocode.exceptions.ModelNotFoundException;
 import com.mitocode.model.Patient;
 import com.mitocode.service.IPatientService;
 import jakarta.validation.Valid;
@@ -45,36 +44,23 @@ public class PatientController {
 		return ResponseEntity.created(location).build();
 	}
 
-	@PutMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<Object> update(@RequestBody PatientDTO patientDTO) {
-		Patient pac = service.findById(patientDTO.getIdPatient());
-		if (pac == null)
-			throw new ModelNotFoundException("ID NOT FOUND:" +patientDTO.getIdPatient());
-
-		return new ResponseEntity<>(service.update(convertToEntity(patientDTO)),OK);
+	@PutMapping("/{id}")
+	public ResponseEntity<PatientDTO> update(@PathVariable("id") Integer id, @Valid @RequestBody PatientDTO patientDTO) {
+		patientDTO.setIdPatient(id);
+		Patient pac = service.update(convertToEntity(patientDTO), id);
+		return new ResponseEntity<>(convertToDto(pac),OK);
 	}
 
 	@DeleteMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<Void> delete(@PathVariable Integer id) {
-		Patient pac = service.findById(id);
-		if (pac == null) 
-			throw new ModelNotFoundException("ID NOT FOUND:" + id);
-		else 
-			service.delete(id);
-
+		service.delete(id);
 		return new ResponseEntity<>(OK);
 	}
 	
 	@GetMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<PatientDTO> findById(@PathVariable("id") Integer id) {
-		PatientDTO dtoResponse;
 		Patient patient = service.findById(id);
-		if (patient == null)
-			throw new ModelNotFoundException("ID NOT FOUND:" + id);
-        else
-			dtoResponse = convertToDto(patient);
-
-		return new ResponseEntity<>(dtoResponse, OK);
+		return new ResponseEntity<>(this.convertToDto(patient), OK);
 	}
 	
 	@GetMapping(value="/pageablePatient", produces = MediaType.APPLICATION_JSON_VALUE)
@@ -87,11 +73,7 @@ public class PatientController {
 	public EntityModel<PatientDTO> findByIdHateoas(@PathVariable("id") Integer id) {
 		PatientDTO dtoResponse;
 		Patient pac = service.findById(id);
-		if (pac == null)
-			throw new ModelNotFoundException("ID NOT FOUND: " + id);
-		else
-			dtoResponse = convertToDto(pac);
-
+		dtoResponse = convertToDto(pac);
 		EntityModel<PatientDTO> resource = EntityModel.of(dtoResponse);
 		WebMvcLinkBuilder link1 = linkTo(methodOn(this.getClass()).findById(id));
 		WebMvcLinkBuilder link2 = linkTo(methodOn(this.getClass()).findAll());

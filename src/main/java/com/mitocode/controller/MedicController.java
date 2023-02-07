@@ -45,36 +45,23 @@ public class MedicController {
 		return ResponseEntity.created(location).build();
 	}
 
-	@PutMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<Object> update(@Valid @RequestBody MedicDTO medicDTO) {
-		Medic med = service.findById(medicDTO.getIdMedic());
-		if (med == null)
-			throw new ModelNotFoundException("ID NOT FOUND:" +medicDTO.getIdMedic());
-
-		return new ResponseEntity<>(service.update(convertToEntity(medicDTO)),OK);
+	@PutMapping("/{id}")
+	public ResponseEntity<MedicDTO> update(@PathVariable ("id") Integer id,@Valid @RequestBody MedicDTO medicDTO) {
+		medicDTO.setIdMedic(id);
+		Medic med = service.update(convertToEntity(medicDTO), id);
+		return new ResponseEntity<>(convertToDto(med),OK);
 	}
 
 	@DeleteMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<Void> delete(@PathVariable Integer id) {
-		Medic med = service.findById(id);
-		if (med == null)
-			throw new ModelNotFoundException("ID NOT FOUND:" + id);
-		else 
-			service.delete(id);
-
+		service.delete(id);
 		return new ResponseEntity<>(OK);
 	}
 	
 	@GetMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<MedicDTO> findById(@PathVariable("id") Integer id) {
-		MedicDTO dtoResponse;
 		Medic medic = service.findById(id);
-		if (medic == null)
-			throw new ModelNotFoundException("Not Found ID: " + id);
-		else
-			dtoResponse = convertToDto(medic);
-
-		return new ResponseEntity<>(dtoResponse, OK);
+		return new ResponseEntity<>(this.convertToDto(medic), OK);
 	}
 	
 	@GetMapping(value="/pageableMedic", produces = MediaType.APPLICATION_JSON_VALUE)
@@ -87,11 +74,7 @@ public class MedicController {
 	public EntityModel<MedicDTO> findByIdHateoas(@PathVariable("id") Integer id) {
 		MedicDTO dtoResponse;
 		Medic med = service.findById(id);
-		if (med == null)
-			throw new ModelNotFoundException("ID NOT FOUND: " + id);
-		else
-			dtoResponse = convertToDto(med);
-
+		dtoResponse = convertToDto(med);
 		EntityModel<MedicDTO> resource = EntityModel.of(dtoResponse);
 		WebMvcLinkBuilder link1 = linkTo(methodOn(this.getClass()).findById(id));
 		WebMvcLinkBuilder link2 = linkTo(methodOn(this.getClass()).findAll());

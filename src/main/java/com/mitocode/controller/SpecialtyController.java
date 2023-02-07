@@ -45,36 +45,23 @@ public class SpecialtyController {
 		return ResponseEntity.created(location).build();
 	}
 
-	@PutMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
-	public ResponseEntity<Object> update(@Valid @RequestBody SpecialtyDTO specialtyDTO) {
-		Specialty spe = service.findById(specialtyDTO.getIdSpecialty());
-		if (spe == null)
-			throw new ModelNotFoundException("ID NOT FOUND:" + specialtyDTO.getIdSpecialty());
-
-		return new ResponseEntity<>(service.update(convertToEntity(specialtyDTO)),OK);
+	@PutMapping ("/{id}")
+	public ResponseEntity<SpecialtyDTO> update(@PathVariable("id") Integer id,@Valid @RequestBody SpecialtyDTO specialtyDTO) {
+		specialtyDTO.setIdSpecialty(id);
+		Specialty spe = service.update(convertToEntity(specialtyDTO),id);
+		return new ResponseEntity<>(convertToDto(spe),OK);
 	}
 
 	@DeleteMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<Void> delete(@PathVariable Integer id) {
-		Specialty spe = service.findById(id);
-		if (spe == null)
-			throw new ModelNotFoundException("ID NOT FOUND: " + id);
-		else 
-			service.delete(id);
-
+		service.delete(id);
 		return new ResponseEntity<>(OK);
 	}
 	
 	@GetMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<SpecialtyDTO> findById(@PathVariable("id") Integer id) {
-		SpecialtyDTO dtoResponse;
 		Specialty specialty = service.findById(id);
-		if (specialty == null)
-			throw new ModelNotFoundException("ID NOT FOUND: " + id);
-		else
-			dtoResponse = convertToDto(specialty);
-
-		return new ResponseEntity<>(dtoResponse, OK);
+		return new ResponseEntity<>(this.convertToDto(specialty), OK);
 	}
 	
 	@GetMapping(value="/pageableSpeciality", produces = MediaType.APPLICATION_JSON_VALUE)
@@ -87,11 +74,7 @@ public class SpecialtyController {
 	public EntityModel<SpecialtyDTO> findByIdHateoas(@PathVariable("id") Integer id) {
 		SpecialtyDTO dtoResponse;
 		Specialty esp = service.findById(id);
-		if (esp == null)
-			throw new ModelNotFoundException("ID NOT FOUND: " + id);
-		else
-			dtoResponse = convertToDto(esp);
-
+		dtoResponse = convertToDto(esp);
 		EntityModel<SpecialtyDTO> resource = EntityModel.of(dtoResponse);
 		WebMvcLinkBuilder link1 = linkTo(methodOn(this.getClass()).findById(id));
 		WebMvcLinkBuilder link2 = linkTo(methodOn(this.getClass()).findAll());
