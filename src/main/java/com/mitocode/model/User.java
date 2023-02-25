@@ -13,7 +13,7 @@ public class User {
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Integer idUser;
 
-	@Column(name = "user_name", nullable = false, unique = true)
+	@Column(name = "username", nullable = false, unique = true)
 	private String userName;
 
 	@Column(name = "password", nullable = false)
@@ -23,7 +23,7 @@ public class User {
 	private boolean enabled;
 
 	@ManyToMany(fetch = FetchType.EAGER, cascade = CascadeType.ALL)
-	@JoinTable(name = "user_rol", joinColumns = @JoinColumn(name = "id_user", referencedColumnName = "idUser"),
-			inverseJoinColumns = @JoinColumn(name = "id_rol", referencedColumnName = "idRol"))
-	private List<Rol> roles;
+	@JoinTable(name = "user_role", joinColumns = @JoinColumn(name = "id_user", referencedColumnName = "idUser"),
+			inverseJoinColumns = @JoinColumn(name = "id_role", referencedColumnName = "idRole"))
+	private List<Role> roles;
 }

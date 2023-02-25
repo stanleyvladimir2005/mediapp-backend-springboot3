@@ -81,7 +81,6 @@ public class ConsultController {
 		return new ResponseEntity<>(consultDTO, OK);
 	}
 	
-	//Nivel 3 Richardson
 	@GetMapping(value = "/hateoas", produces = MediaType.APPLICATION_JSON_VALUE)
 	public List<ConsultHateoasDTO> listHateoas() {
 		List<Consult> consults;
