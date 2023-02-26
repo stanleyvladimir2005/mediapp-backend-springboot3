@@ -58,7 +58,7 @@ public class ConsultServiceImpl extends CRUDImpl<Consult,Integer>  implements IC
 		repo.callProcedureOrFunction().forEach( x -> {
 			ConsultProductDTO cr = new ConsultProductDTO();
 			cr.setQuantity(Integer.parseInt(String.valueOf(x[0])));
-			cr.setConsultDate(String.valueOf(x[1]));
+			cr.setConsultdate(String.valueOf(x[1]));
 			consultas.add(cr);
 		});
 		return consultas;

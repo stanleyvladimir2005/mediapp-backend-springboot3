@@ -5,5 +5,5 @@ import lombok.Data;
 @Data
 public class ConsultProductDTO {
 	private Integer quantity;
-	private String consultDate;
+	private String consultdate;
 }

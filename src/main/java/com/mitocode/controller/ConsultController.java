@@ -108,7 +108,7 @@ public class ConsultController {
 
 	@PostMapping("/search/others")
 	public ResponseEntity<List<ConsultDTO>> searchByOthers(@RequestBody FilterConsultDTO filterDTO){
-		List<Consult> consults = service.search(filterDTO.getDui(), filterDTO.getFullName());
+		List<Consult> consults = service.search(filterDTO.getDui(), filterDTO.getFullname());
 		List<ConsultDTO> consultsDTO = mapper.map(consults, new TypeToken<List<ConsultDTO>>() {}.getType());
 		return new ResponseEntity<>(consultsDTO, OK);
 	}
@@ -120,7 +120,7 @@ public class ConsultController {
 		return new ResponseEntity<>(consultsDTO, OK);
 	}
 	
-	@GetMapping(value = "/listProducts")
+	@GetMapping(value = "/callProcedure")
 	public ResponseEntity<List<ConsultProductDTO>> listProducts() {
 		List<ConsultProductDTO> consults  = service.callProcedureOrFunction();
 		return new ResponseEntity<>(consults, OK);

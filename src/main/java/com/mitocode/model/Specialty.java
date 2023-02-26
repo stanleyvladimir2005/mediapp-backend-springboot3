@@ -20,7 +20,11 @@ public class Specialty {
 	@Column(name = "specialty_name", nullable = false, length = 50)
 	@Size(min=3, message ="{speciality_name.size}")
 	private String specialtyName;
-	
+
+	@Column(name = "description", nullable = false, length = 150)
+	@Size(min=3, message ="{speciality_name.size}")
+	private String description;
+
 	@Column(name = "status")
 	private Boolean status;
 }

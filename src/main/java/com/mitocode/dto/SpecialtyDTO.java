@@ -15,5 +15,8 @@ public class SpecialtyDTO {
     private String specialtyName;
 
     @NotNull
+    private String description;
+
+    @NotNull
     private Boolean status;
 }

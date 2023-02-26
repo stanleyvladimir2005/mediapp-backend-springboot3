@@ -10,8 +10,8 @@ import java.util.List;
 @Repository
 public interface IConsultRepo extends IGenericRepo <Consult, Integer> {
 	
- @Query("from Consult c where c.patient.dui =:dui or LOWER(c.patient.firstName) like %:fullName% or LOWER(c.patient.lastName) like %:fullName%")
- List<Consult> search(@Param("dui")String dui, @Param("fullName") String fullName);
+ @Query("from Consult c where c.patient.dui =:dui or LOWER(c.patient.firstName) like %:fullname% or LOWER(c.patient.lastName) like %:fullname%")
+ List<Consult> search(@Param("dui")String dui, @Param("fullname") String fullname);
 
  @Query("from Consult c where c.consultDate between :date1 and :date2")
  List<Consult> searchByDates(@Param("date1") LocalDateTime date1, @Param("date2") LocalDateTime date2);
