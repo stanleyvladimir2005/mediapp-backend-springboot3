@@ -1,7 +1,6 @@
 package com.mitocode.controller;
 
 import com.mitocode.dto.MedicDTO;
-import com.mitocode.exceptions.ModelNotFoundException;
 import com.mitocode.model.Medic;
 import com.mitocode.service.IMedicService;
 import org.modelmapper.ModelMapper;
@@ -32,6 +31,7 @@ public class MedicController {
 	@Autowired
 	private ModelMapper mapper;
 
+	//@PreAuthorize("@authServiceImpl.hasAccess('findAll')")
 	@GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<List<MedicDTO>> findAll() {
 		List<MedicDTO> medics = service.findAll().stream().map(this::convertToDto).collect(Collectors.toList());

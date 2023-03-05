@@ -13,7 +13,7 @@ public class MapperConfig {
     }
 
     /*
-    @Bean("medicMapper") //Mapeo manual de dto a entidad
+    @Bean("medicMapper") //Mapeo manual de dto -> entidad
     public ModelMapper medicMapper(){
         ModelMapper mapper = new ModelMapper();
         TypeMap<MedicDTO, Medic> typeMap1 = mapper.createTypeMap(MedicDTO.class, Medic.class);

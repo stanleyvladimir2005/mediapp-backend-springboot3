@@ -48,7 +48,6 @@ public class WebSecurityConfig {
                 .csrf().disable()
                 .authorizeHttpRequests(req -> req
                         .requestMatchers("/login").permitAll()
-                        //.requestMatchers("/patients/**").permitAll()
                         .anyRequest().authenticated())
                 .httpBasic()
                 .and()
@@ -57,9 +56,7 @@ public class WebSecurityConfig {
                 .formLogin().disable()
                 .sessionManagement()
                 .sessionCreationPolicy(SessionCreationPolicy.STATELESS);
-
         httpSecurity.addFilterBefore(jwtRequestFilter, UsernamePasswordAuthenticationFilter.class);
-
         return httpSecurity.build();
     }
 }
