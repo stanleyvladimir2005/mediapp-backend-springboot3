@@ -1,21 +1,17 @@
 package com.mitocode.utils;
 
+import lombok.AllArgsConstructor;
 import lombok.Data;
+import lombok.NoArgsConstructor;
 import java.util.Map;
 
 @Data
+@AllArgsConstructor
+@NoArgsConstructor
 public class Mail {
 
 	private String from;
 	private String to;
 	private String subject;
 	private Map<String, Object> model;
-
-	public Map<String, Object> getModel() {
-		return model;
-	}
-
-	public void setModel(Map<String, Object> model) {
-		this.model = model;
-	}
 }
