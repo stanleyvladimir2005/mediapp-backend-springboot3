@@ -7,6 +7,8 @@ import lombok.Data;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.Where;
 
+import java.util.List;
+
 @Data
 @Entity
 @Table(name ="patient")
@@ -42,6 +44,9 @@ public class Patient {
 	@Size(message = "{email.size}")
 	@Column(name = "email", length = 150)
 	private String email;
+
+	@OneToMany(mappedBy = "patient", cascade = {CascadeType.ALL}, orphanRemoval = true, fetch = FetchType.EAGER)
+	private List<Sing> singList;
 	
 	@Column(name = "status")
 	private Boolean status;

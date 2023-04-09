@@ -8,6 +8,7 @@ import lombok.EqualsAndHashCode;
 @Data
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 public class ConsultDetailDTO {
+
     @EqualsAndHashCode.Include
     private Integer idDetail;
 
