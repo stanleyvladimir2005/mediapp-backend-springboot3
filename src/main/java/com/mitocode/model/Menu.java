@@ -1,7 +1,6 @@
 package com.mitocode.model;
 
 import lombok.Data;
-
 import jakarta.persistence.*;
 import java.util.List;
 

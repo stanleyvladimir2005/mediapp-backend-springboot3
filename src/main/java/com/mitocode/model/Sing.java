@@ -6,7 +6,6 @@ import com.fasterxml.jackson.databind.ser.std.ToStringSerializer;
 import jakarta.persistence.*;
 import jakarta.validation.constraints.Size;
 import lombok.Data;
-import lombok.EqualsAndHashCode;
 import org.hibernate.annotations.SQLDelete;
 import org.hibernate.annotations.Where;
 import java.time.LocalDateTime;
@@ -16,17 +15,11 @@ import java.time.LocalDateTime;
 @Table(name ="sing")
 @SQLDelete(sql = "UPDATE sing SET status = false WHERE id_sing = ?")
 @Where(clause = "status = true")
-@EqualsAndHashCode(onlyExplicitlyIncluded = true)
 public class Sing {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Integer idSing;
-
-    @ManyToOne
-    @JsonIgnore
-    @JoinColumn(name = "id_patient", nullable = false)
-    private Patient patient;
 
     @JsonSerialize(using = ToStringSerializer.class) //iso date format
     @Column(name = "sing_date")
@@ -45,5 +38,9 @@ public class Sing {
     private String respiratoryRate;
 
     @Column(name = "status")
-    private boolean status;
+    private Boolean status;
+
+    @ManyToOne
+    @JoinColumn(name = "id_patient", nullable = false)
+    private Patient patient;
 }

@@ -7,7 +7,6 @@ import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Size;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
-
 import java.util.List;
 
 @Data
@@ -45,8 +44,7 @@ public class PatientDTO {
     private String email;
 
     @JsonManagedReference
-    @NotNull
-    private List<SingDTO> singdetails;
+    private List<SingDTO> singList;
 
     @NotNull
     private Boolean status;

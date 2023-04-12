@@ -1,7 +1,6 @@
 package com.mitocode.dto;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.validation.constraints.NotNull;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
@@ -30,5 +29,5 @@ public class SingDTO {
     private String respiratoryRate;
 
     @NotNull
-    private boolean status;
+    private Boolean status;
 }

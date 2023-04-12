@@ -10,6 +10,7 @@ import java.util.List;
 @Data
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 public class ConsultDTO {
+
     @EqualsAndHashCode.Include
     private Integer idConsult;
 

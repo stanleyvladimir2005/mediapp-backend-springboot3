@@ -48,7 +48,7 @@ public class WebSecurityConfig {
                 .csrf().disable()
                 .authorizeHttpRequests(req -> req
                         .requestMatchers("/login").permitAll()
-                        .anyRequest().authenticated())
+                        .anyRequest().permitAll())
                 .httpBasic()
                 .and()
                 .exceptionHandling().authenticationEntryPoint(jwtAuthenticationEntryPoint)
