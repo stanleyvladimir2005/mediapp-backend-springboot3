@@ -71,9 +71,7 @@ public class ConsultServiceImpl extends CRUDImpl<Consult,Integer>  implements IC
 			File file = new ClassPathResource("/reports/consultas.jasper").getFile();
 			JasperPrint print = JasperFillManager.fillReport(file.getPath(), null, new JRBeanCollectionDataSource(this.callProcedureOrFunction()));
 			data = JasperExportManager.exportReportToPdf(print);
-		}catch(Exception e) {
-			e.printStackTrace();
-		}
+		}catch(Exception ignored) {	}
 		return data;
 	}
 }
