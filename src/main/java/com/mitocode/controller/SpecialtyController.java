@@ -1,7 +1,6 @@
 package com.mitocode.controller;
 
 import com.mitocode.dto.SpecialtyDTO;
-import com.mitocode.exceptions.ModelNotFoundException;
 import com.mitocode.model.Specialty;
 import com.mitocode.service.ISpecialtyService;
 import org.modelmapper.ModelMapper;
@@ -72,9 +71,8 @@ public class SpecialtyController {
 
 	@GetMapping("/hateoas/{id}")
 	public EntityModel<SpecialtyDTO> findByIdHateoas(@PathVariable("id") Integer id) {
-		SpecialtyDTO dtoResponse;
 		Specialty esp = service.findById(id);
-		dtoResponse = convertToDto(esp);
+		SpecialtyDTO dtoResponse = convertToDto(esp);
 		EntityModel<SpecialtyDTO> resource = EntityModel.of(dtoResponse);
 		WebMvcLinkBuilder link1 = linkTo(methodOn(this.getClass()).findById(id));
 		WebMvcLinkBuilder link2 = linkTo(methodOn(this.getClass()).findAll());

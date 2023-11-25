@@ -33,7 +33,7 @@ public class PatientController {
 
 	@GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<List<PatientDTO>> findAll() {
-		List<PatientDTO> patients = service.findAll().stream().map(this::convertToDto).collect(Collectors.toList()); //p -> convertToDto(p))
+		List<PatientDTO> patients = service.findAll().stream().map(this::convertToDto).collect(Collectors.toList());
 		return new ResponseEntity<>(patients, OK);
 	}
 	
@@ -71,9 +71,8 @@ public class PatientController {
 
 	@GetMapping("/hateoas/{id}")
 	public EntityModel<PatientDTO> findByIdHateoas(@PathVariable("id") Integer id) {
-		PatientDTO dtoResponse;
 		Patient pac = service.findById(id);
-		dtoResponse = convertToDto(pac);
+		PatientDTO dtoResponse = convertToDto(pac);
 		EntityModel<PatientDTO> resource = EntityModel.of(dtoResponse);
 		WebMvcLinkBuilder link1 = linkTo(methodOn(this.getClass()).findById(id));
 		WebMvcLinkBuilder link2 = linkTo(methodOn(this.getClass()).findAll());

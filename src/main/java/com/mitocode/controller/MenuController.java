@@ -26,10 +26,11 @@ public class MenuController {
     @PostMapping("/user")
     public ResponseEntity<List<MenuDTO>> getMenusByUser(@RequestBody String username) throws Exception {
         List<Menu> menus = service.getMenusByUsername(username);
-        List<MenuDTO> menusDTO = menus.stream().map(m -> {
-            m.setRoles(new ArrayList<>()); //necesario porque fue un nativeQuery y devuelve PersistenBag
-            return modelMapper.map(m, MenuDTO.class);
-        }).collect(Collectors.toList());
+        List<MenuDTO> menusDTO = menus.stream()
+                .map(m -> {
+                            m.setRoles(new ArrayList<>()); //Necesario por nativeQuery y devuelve PersistenBag
+                             return modelMapper.map(m, MenuDTO.class);
+                }).collect(Collectors.toList());
         return new ResponseEntity<>(menusDTO, HttpStatus.OK);
     }
 }

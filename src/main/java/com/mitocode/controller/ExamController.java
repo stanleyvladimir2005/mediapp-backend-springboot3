@@ -71,9 +71,8 @@ public class ExamController {
 
 	@GetMapping("/hateoas/{id}")
 	public EntityModel<ExamDTO> findByIdHateoas(@PathVariable("id") Integer id) {
-		ExamDTO dtoResponse;
 		Exam exa = service.findById(id);
-		dtoResponse = convertToDto(exa);
+		ExamDTO dtoResponse = convertToDto(exa);
 		EntityModel<ExamDTO> resource = EntityModel.of(dtoResponse);
 		WebMvcLinkBuilder link1 = linkTo(methodOn(this.getClass()).findById(id));
 		WebMvcLinkBuilder link2 = linkTo(methodOn(this.getClass()).findAll());

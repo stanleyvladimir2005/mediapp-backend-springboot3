@@ -21,15 +21,16 @@ public class EmailUtil {
 	
 	public void sendMail(Mail mail) throws MessagingException {
 		MimeMessage message = emailSender.createMimeMessage();
-		MimeMessageHelper helper = new MimeMessageHelper(message, MimeMessageHelper.MULTIPART_MODE_MIXED_RELATED, StandardCharsets.UTF_8.name());
-		Context context = new Context(); //Establecer variables de la plantilla
+		MimeMessageHelper helper = new MimeMessageHelper(
+				               message, MimeMessageHelper.MULTIPART_MODE_MIXED_RELATED, StandardCharsets.UTF_8.name());
+		Context context = new Context(); //Establece variables de la plantilla
 		context.setVariables(mail.getModel());
-		String html = templateEngine.process("email/email-template", context);
+		var html = templateEngine.process("email/email-template", context);
 		helper.setTo(mail.getTo());
 		helper.setText(html, true);
 		helper.setSubject(mail.getSubject());
 		helper.setFrom(mail.getFrom());
-		helper.addAttachment("MyTestFile.txt", new ByteArrayResource("test".toString().getBytes()));
+		helper.addAttachment("MyTestFile.txt", new ByteArrayResource("test".getBytes()));
 		emailSender.send(message);
 	}
 }

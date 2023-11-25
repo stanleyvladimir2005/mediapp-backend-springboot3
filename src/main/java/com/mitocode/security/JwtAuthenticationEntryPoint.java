@@ -1,7 +1,5 @@
 package com.mitocode.security;
 
-//Clase S6
-
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mitocode.exceptions.CustomErrorResponse;
@@ -21,7 +19,7 @@ public class JwtAuthenticationEntryPoint implements AuthenticationEntryPoint {
 
     @Override
     public void commence(HttpServletRequest request, HttpServletResponse response, AuthenticationException authException) throws IOException {
-        String exceptionMsg = (String) request.getAttribute("exception");
+        var exceptionMsg = (String) request.getAttribute("exception");
         if(exceptionMsg == null)
             exceptionMsg = "Token not found";
 

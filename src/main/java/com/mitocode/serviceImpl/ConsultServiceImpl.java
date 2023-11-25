@@ -19,6 +19,7 @@ import java.io.File;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 @Service
 public class ConsultServiceImpl extends CRUDImpl<Consult,Integer>  implements IConsultService {
@@ -54,14 +55,14 @@ public class ConsultServiceImpl extends CRUDImpl<Consult,Integer>  implements IC
 
 	@Override
 	public List<ConsultProductDTO> callProcedureOrFunction() {
-		List<ConsultProductDTO> consultas = new ArrayList<>();
-		repo.callProcedureOrFunction().forEach( x -> {
-			ConsultProductDTO cr = new ConsultProductDTO();
-			cr.setQuantity(Integer.parseInt(String.valueOf(x[0])));
-			cr.setConsultdate(String.valueOf(x[1]));
-			consultas.add(cr);
-		});
-		return consultas;
+		return repo.callProcedureOrFunction().stream()
+				.map(x -> {
+					ConsultProductDTO cr = new ConsultProductDTO();
+					cr.setQuantity(Integer.parseInt(String.valueOf(x[0])));
+					cr.setConsultdate(String.valueOf(x[1]));
+					return cr;
+				})
+				.collect(Collectors.toList());
 	}
 
 	@Override

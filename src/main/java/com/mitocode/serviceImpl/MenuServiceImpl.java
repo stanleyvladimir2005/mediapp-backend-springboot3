@@ -18,7 +18,8 @@ public class MenuServiceImpl extends CRUDImpl<Menu, Integer> implements IMenuSer
 
     @Override
     public List<Menu> getMenusByUsername(String username) {
-        String contextSessionUser = SecurityContextHolder.getContext().getAuthentication().getName(); //Para obtener el usuario de la session de spring security
+        //Para obtener el usuario de la session de spring security
+        String contextSessionUser = SecurityContextHolder.getContext().getAuthentication().getName();
         return repo.getMenusByUsername(contextSessionUser);
     }
 

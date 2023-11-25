@@ -72,9 +72,8 @@ public class MedicController {
 
 	@GetMapping("/hateoas/{id}")
 	public EntityModel<MedicDTO> findByIdHateoas(@PathVariable("id") Integer id) {
-		MedicDTO dtoResponse;
 		Medic med = service.findById(id);
-		dtoResponse = convertToDto(med);
+		MedicDTO dtoResponse = convertToDto(med);
 		EntityModel<MedicDTO> resource = EntityModel.of(dtoResponse);
 		WebMvcLinkBuilder link1 = linkTo(methodOn(this.getClass()).findById(id));
 		WebMvcLinkBuilder link2 = linkTo(methodOn(this.getClass()).findAll());

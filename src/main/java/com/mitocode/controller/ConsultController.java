@@ -21,7 +21,6 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import jakarta.validation.Valid;
 import java.io.IOException;
 import java.net.URI;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.time.LocalDateTime;
@@ -80,31 +79,32 @@ public class ConsultController {
 		Page<ConsultDTO> consultDTO  = service.listPageable(pageable).map(this::convertToDto);
 		return new ResponseEntity<>(consultDTO, OK);
 	}
-	
+
 	@GetMapping(value = "/hateoas", produces = MediaType.APPLICATION_JSON_VALUE)
 	public List<ConsultHateoasDTO> listHateoas() {
-		List<Consult> consults;
-		List<ConsultHateoasDTO> consultasDTO = new ArrayList<>();
-		consults = service.findAll();
+		List<Consult> consults = service.findAll();
 
-		for (Consult c : consults) {
-			ConsultHateoasDTO d = new ConsultHateoasDTO();
-			d.setIdConsult(c.getIdConsult());
-			d.setMedic(c.getMedic());
-			d.setPatient(c.getPatient());
+		return consults.stream()
+			.map(c -> {
+				ConsultHateoasDTO d = new ConsultHateoasDTO();
+				d.setIdConsult(c.getIdConsult());
+				d.setMedic(c.getMedic());
+				d.setPatient(c.getPatient());
 
-			WebMvcLinkBuilder linkTo = linkTo(methodOn(ConsultController.class).findById((c.getIdConsult())));
-			d.add(linkTo.withSelfRel());
+				WebMvcLinkBuilder linkTo = linkTo(methodOn(ConsultController.class).findById(c.getIdConsult()));
+				d.add(linkTo.withSelfRel());
 
-			WebMvcLinkBuilder linkTo1 = linkTo(methodOn(PatientController.class).findById((c.getPatient().getIdPatient())));
-			d.add(linkTo1.withSelfRel());
+				WebMvcLinkBuilder linkToPatient = linkTo(methodOn(PatientController.class).findById(c.getPatient().getIdPatient()));
+				d.add(linkToPatient.withRel("patient"));
 
-			WebMvcLinkBuilder linkTo2 = linkTo(methodOn(MedicController.class).findById((c.getMedic().getIdMedic())));
-			d.add(linkTo2.withSelfRel());
-			consultasDTO.add(d);
-		}
-		return consultasDTO;
+				WebMvcLinkBuilder linkToMedic = linkTo(methodOn(MedicController.class).findById(c.getMedic().getIdMedic()));
+				d.add(linkToMedic.withRel("medic"));
+
+				return d;
+			})
+			.collect(Collectors.toList());
 	}
+
 
 	@PostMapping("/search/others")
 	public ResponseEntity<List<ConsultDTO>> searchByOthers(@RequestBody FilterConsultDTO filterDTO){

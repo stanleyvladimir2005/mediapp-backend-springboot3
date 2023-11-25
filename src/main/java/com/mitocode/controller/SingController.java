@@ -1,8 +1,6 @@
 package com.mitocode.controller;
 
-import com.mitocode.dto.PatientDTO;
 import com.mitocode.dto.SingDTO;
-import com.mitocode.model.Patient;
 import com.mitocode.model.Sing;
 import com.mitocode.service.ISingService;
 import jakarta.validation.Valid;
@@ -19,7 +17,6 @@ import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import java.net.URI;
 import java.util.List;
 import java.util.stream.Collectors;
-
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 import static org.springframework.http.HttpStatus.OK;
@@ -74,9 +71,8 @@ public class SingController {
 
 	@GetMapping("/hateoas/{id}")
 	public EntityModel<SingDTO> findByIdHateoas(@PathVariable("id") Integer id) {
-		SingDTO dtoResponse;
 		Sing sing = service.findById(id);
-		dtoResponse = convertToDto(sing);
+		SingDTO dtoResponse = convertToDto(sing);
 		EntityModel<SingDTO> resource = EntityModel.of(dtoResponse);
 		WebMvcLinkBuilder link1 = linkTo(methodOn(this.getClass()).findById(id));
 		WebMvcLinkBuilder link2 = linkTo(methodOn(this.getClass()).findAll());

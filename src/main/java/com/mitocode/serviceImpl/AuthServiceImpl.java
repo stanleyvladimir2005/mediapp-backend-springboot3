@@ -8,7 +8,7 @@ import org.springframework.stereotype.Service;
 
 @Slf4j
 @Service
-public class AuthServiceImpl { //Para caso de acceso usando @PreAuthorize
+public class AuthServiceImpl { //Para uso de acceso usando @PreAuthorize
 
     public boolean hasAccess(String path){
         boolean rpta = false;

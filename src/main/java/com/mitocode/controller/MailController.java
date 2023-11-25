@@ -21,15 +21,12 @@ import java.util.UUID;
 public class MailController {
 
     private final ILoginService loginService;
-
     private final IResetMailService resetMailService;
-
     private final EmailUtil emailUtil;
 
     @PostMapping(value = "/sendMail")
     public ResponseEntity<Integer> sendMail(@RequestBody String username) throws Exception {
-        int rpta = 0;
-
+        var rpta = 0;
         User us = loginService.checkUsername(username);
         if(us != null && us.getIdUser() > 0) {
             ResetMail resetMail = new ResetMail();
@@ -44,13 +41,12 @@ public class MailController {
             mail.setSubject("RESTABLECER CONTRASEÑA  MEDIAPP");
 
             Map<String, Object> model = new HashMap<>();
-            String url = "http://localhost:4200/#/forgot/" + resetMail.getRandom();
+            var url = "http://localhost:4200/#/forgot/" + resetMail.getRandom();
             model.put("user", resetMail.getUser().getUsername());
             model.put("resetUrl", url);
             mail.setModel(model);
 
             emailUtil.sendMail(mail);
-
             rpta = 1;
         }
         return new ResponseEntity<>(rpta, HttpStatus.OK);
@@ -58,7 +54,7 @@ public class MailController {
 
     @GetMapping(value = "/reset/check/{random}")
     public ResponseEntity<Integer> checkRandom(@PathVariable("random") String random) {
-        int rpta = 0;
+        var rpta = 0;
         try {
             if (random != null && !random.isEmpty()) {
                 ResetMail rm = resetMailService.findByRandom(random);
@@ -82,9 +78,8 @@ public class MailController {
                 if (!rm.isExpired()) {
                     loginService.changePassword(password, rm.getUser().getUsername());
                     resetMailService.delete(rm);
-                    }
                 }
-
+            }
         } catch (Exception e) {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);
         }
