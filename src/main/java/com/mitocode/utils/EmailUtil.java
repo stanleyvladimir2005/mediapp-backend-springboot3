@@ -1,8 +1,8 @@
 package com.mitocode.utils;
 
 import jakarta.mail.MessagingException;
-import jakarta.mail.internet.MimeMessage;
 import lombok.RequiredArgsConstructor;
+import lombok.val;
 import org.springframework.core.io.ByteArrayResource;
 import org.springframework.mail.javamail.JavaMailSender;
 import org.springframework.mail.javamail.MimeMessageHelper;
@@ -20,12 +20,11 @@ public class EmailUtil {
 	private final SpringTemplateEngine templateEngine;
 	
 	public void sendMail(Mail mail) throws MessagingException {
-		MimeMessage message = emailSender.createMimeMessage();
-		MimeMessageHelper helper = new MimeMessageHelper(
-				               message, MimeMessageHelper.MULTIPART_MODE_MIXED_RELATED, StandardCharsets.UTF_8.name());
-		Context context = new Context(); //Establece variables de la plantilla
+		val message = emailSender.createMimeMessage();
+		val helper = new MimeMessageHelper(message, MimeMessageHelper.MULTIPART_MODE_MIXED_RELATED, StandardCharsets.UTF_8.name());
+		val context = new Context(); //Establece variables de la plantilla
 		context.setVariables(mail.getModel());
-		var html = templateEngine.process("email/email-template", context);
+		val html = templateEngine.process("email/email-template", context);
 		helper.setTo(mail.getTo());
 		helper.setText(html, true);
 		helper.setSubject(mail.getSubject());

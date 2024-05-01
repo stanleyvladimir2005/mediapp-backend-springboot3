@@ -5,6 +5,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import com.mitocode.exceptions.CustomErrorResponse;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import lombok.val;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
 import org.springframework.security.core.AuthenticationException;
@@ -23,7 +24,7 @@ public class JwtAuthenticationEntryPoint implements AuthenticationEntryPoint {
         if(exceptionMsg == null)
             exceptionMsg = "Token not found";
 
-        CustomErrorResponse errorResponse = new CustomErrorResponse(LocalDateTime.now(), exceptionMsg, request.getRequestURI());
+        val errorResponse = new CustomErrorResponse(LocalDateTime.now(), exceptionMsg, request.getRequestURI());
         response.setStatus(HttpStatus.UNAUTHORIZED.value());
         response.getWriter().write(convertObjectToJson(errorResponse));
         response.setContentType(MediaType.APPLICATION_JSON_VALUE);
@@ -33,7 +34,7 @@ public class JwtAuthenticationEntryPoint implements AuthenticationEntryPoint {
         if (object == null)
             return null;
 
-        ObjectMapper mapper = new ObjectMapper();
+        val mapper = new ObjectMapper();
         mapper.findAndRegisterModules();
         return mapper.writeValueAsString(object);
     }

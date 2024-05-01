@@ -5,12 +5,12 @@ import com.mitocode.security.JwtResponse;
 import com.mitocode.security.JwtTokenUtil;
 import com.mitocode.security.JwtUserDetailsService;
 import lombok.RequiredArgsConstructor;
+import lombok.val;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
 import org.springframework.security.authentication.DisabledException;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -25,8 +25,8 @@ public class LoginController {
     @PostMapping("/login")
     public ResponseEntity<JwtResponse> login(@RequestBody JwtRequest req) throws Exception{
         authenticate(req.getUsername(), req.getPassword());
-        final UserDetails userDetails = userDetailsService.loadUserByUsername(req.getUsername());
-        final String token = jwtTokenUtil.generateToken(userDetails);
+        val userDetails = userDetailsService.loadUserByUsername(req.getUsername());
+        val token = jwtTokenUtil.generateToken(userDetails);
         return ResponseEntity.ok(new JwtResponse(token));
     }
 

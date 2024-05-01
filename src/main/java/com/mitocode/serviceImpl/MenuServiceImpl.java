@@ -4,6 +4,7 @@ import com.mitocode.model.Menu;
 import com.mitocode.repo.IGenericRepo;
 import com.mitocode.repo.IMenuRepo;
 import com.mitocode.service.IMenuService;
+import lombok.val;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
@@ -19,7 +20,7 @@ public class MenuServiceImpl extends CRUDImpl<Menu, Integer> implements IMenuSer
     @Override
     public List<Menu> getMenusByUsername(String username) {
         //Para obtener el usuario de la session de spring security
-        String contextSessionUser = SecurityContextHolder.getContext().getAuthentication().getName();
+        val contextSessionUser = SecurityContextHolder.getContext().getAuthentication().getName();
         return repo.getMenusByUsername(contextSessionUser);
     }
 

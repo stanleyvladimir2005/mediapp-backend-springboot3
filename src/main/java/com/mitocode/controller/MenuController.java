@@ -1,9 +1,9 @@
 package com.mitocode.controller;
 
 import com.mitocode.dto.MenuDTO;
-import com.mitocode.model.Menu;
 import com.mitocode.service.IMenuService;
 import lombok.RequiredArgsConstructor;
+import lombok.val;
 import org.modelmapper.ModelMapper;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -25,12 +25,11 @@ public class MenuController {
 
     @PostMapping("/user")
     public ResponseEntity<List<MenuDTO>> getMenusByUser(@RequestBody String username) throws Exception {
-        List<Menu> menus = service.getMenusByUsername(username);
-        List<MenuDTO> menusDTO = menus.stream()
-                .map(m -> {
-                            m.setRoles(new ArrayList<>()); //Necesario por nativeQuery y devuelve PersistenBag
-                             return modelMapper.map(m, MenuDTO.class);
-                }).collect(Collectors.toList());
+        val menus = service.getMenusByUsername(username);
+        val menusDTO = menus.stream().map(m -> {
+            m.setRoles(new ArrayList<>()); //Necesario por nativeQuery y devuelve PersistenBag
+            return modelMapper.map(m, MenuDTO.class);
+        }).collect(Collectors.toList());
         return new ResponseEntity<>(menusDTO, HttpStatus.OK);
     }
 }

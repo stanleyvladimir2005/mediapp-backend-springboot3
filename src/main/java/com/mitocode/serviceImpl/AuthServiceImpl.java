@@ -1,10 +1,12 @@
 package com.mitocode.serviceImpl;
 
 import lombok.extern.slf4j.Slf4j;
-import org.springframework.security.core.Authentication;
+import lombok.val;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
+
+import java.util.Arrays;
 
 @Slf4j
 @Service
@@ -13,24 +15,20 @@ public class AuthServiceImpl { //Para uso de acceso usando @PreAuthorize
     public boolean hasAccess(String path){
         boolean rpta = false;
 
-        String methodRole = switch (path) {
+        val methodRole = switch (path) {
             case "findAll" -> "ADMIN";
             case "findById" -> "USER,DBA";
             default -> "";
         };
 
-        String methodRoles[] = methodRole.split(",");
-        Authentication auth = SecurityContextHolder.getContext().getAuthentication();
+        val methodRoles = methodRole.split(",");
+        val auth = SecurityContextHolder.getContext().getAuthentication();
         for(GrantedAuthority gra : auth.getAuthorities()){
-            String rolUser = gra.getAuthority();
+            val rolUser = gra.getAuthority();
             log.info(rolUser);
             log.info(auth.getName());
-            for(String rolMet : methodRoles){
-                if(rolUser.equalsIgnoreCase(rolMet)){
-                    rpta = true;
-                    break;
-                }
-            }
+            if (Arrays.stream(methodRoles).anyMatch(rolUser::equalsIgnoreCase))
+                rpta = true;
         }
         return rpta;
     }

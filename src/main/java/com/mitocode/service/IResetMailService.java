@@ -9,5 +9,4 @@ public interface IResetMailService {
     void save(ResetMail random);
 
     void delete(ResetMail random);
-
 }

@@ -1,5 +1,6 @@
 package com.mitocode.config;
 
+import lombok.val;
 import org.springframework.context.MessageSource;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -15,7 +16,7 @@ public class MessageConfig {
     // Carga los properties
     @Bean
     public MessageSource messageSource(){
-        ReloadableResourceBundleMessageSource messageSource = new ReloadableResourceBundleMessageSource();
+        val messageSource = new ReloadableResourceBundleMessageSource();
         messageSource.setBasename("classpath:messages");
         return messageSource;
     }
@@ -23,7 +24,7 @@ public class MessageConfig {
     // Establece un default locale
     @Bean
     public LocaleResolver localeResolver() {
-        SessionLocaleResolver slr = new SessionLocaleResolver();
+        val slr = new SessionLocaleResolver();
         slr.setDefaultLocale(Locale.ROOT);
         return slr;
     }
@@ -31,7 +32,7 @@ public class MessageConfig {
     // Para resolver las variables en messages
     @Bean
     public LocalValidatorFactoryBean getValidator() {
-        LocalValidatorFactoryBean bean = new LocalValidatorFactoryBean();
+        val bean = new LocalValidatorFactoryBean();
         bean.setValidationMessageSource(messageSource());
         return bean;
     }

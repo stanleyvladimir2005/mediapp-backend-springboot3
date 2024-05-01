@@ -2,6 +2,7 @@ package com.mitocode.controller;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import lombok.val;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -27,7 +28,7 @@ public class LanguageController {
 
     @GetMapping("/locale/{loc}")
     public ResponseEntity<Void> changeLocale(@PathVariable("loc") String loc) {
-        Locale userLocale = switch (loc) {
+        val userLocale = switch (loc) {
             case "en" -> Locale.ENGLISH;
             case "fr" -> Locale.FRENCH;
             default -> Locale.ROOT;

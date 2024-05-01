@@ -3,6 +3,7 @@ package com.mitocode.utils;
 import jakarta.servlet.*;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import lombok.val;
 import org.springframework.core.Ordered;
 import org.springframework.core.annotation.Order;
 import org.springframework.stereotype.Component;
@@ -17,8 +18,8 @@ public class CORS implements Filter {
 
 	@Override
 	public void doFilter(ServletRequest req, ServletResponse res, FilterChain chain) throws IOException, ServletException {
-		HttpServletResponse response = (HttpServletResponse) res;
-		HttpServletRequest request = (HttpServletRequest) req;
+		val response = (HttpServletResponse) res;
+		val request = (HttpServletRequest) req;
 		response.setHeader("Access-Control-Allow-Origin", "*");
 		response.setHeader("Access-Control-Allow-Methods", "DELETE, GET, OPTIONS, PATCH, POST, PUT");
 		response.setHeader("Access-Control-Max-Age", "3600");

@@ -1,8 +1,8 @@
 package com.mitocode.controller;
 
 import com.mitocode.dto.ConsultExamDTO;
-import com.mitocode.model.ConsultExam;
 import com.mitocode.service.IConsultExamService;
+import lombok.val;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.TypeToken;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -26,7 +26,7 @@ public class ConsultExamController {
 	
 	@GetMapping(value = "/{idConsult}")
 	public ResponseEntity<List<ConsultExamDTO>> getConsultsById(@PathVariable("idConsult") Integer idConsult) {
-		List<ConsultExam> consultaExamen = service.listExamByConsult(idConsult);
+		val consultaExamen = service.listExamByConsult(idConsult);
 		List<ConsultExamDTO> lstDTO = mapper.map(consultaExamen, new TypeToken<List<ConsultExamDTO>>() {}.getType());
 		return new ResponseEntity<>(lstDTO, OK);
 	}

@@ -4,5 +4,4 @@ import com.mitocode.model.Sing;
 import org.springframework.stereotype.Repository;
 
 @Repository
-public interface ISingRepo extends IGenericRepo<Sing, Integer>{
-}
+public interface ISingRepo extends IGenericRepo<Sing, Integer>{}
