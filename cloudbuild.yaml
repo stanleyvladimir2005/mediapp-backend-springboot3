@@ -1,0 +1,16 @@
+steps:
+  - name: 'gcr.io/cloud-builders/docker'
+    args: ['build', '-t', 'gcr.io/$Proyecto1-Java/mediapp-backend-spring-boot3:v$BUILD_ID', '.']
+  - name: 'gcr.io/cloud-builders/docker'
+    args: ['push', 'gcr.io/$Proyecto1-Java/mediapp-backend-spring-boot3:v$BUILD_ID']
+  - name: 'gcr.io/cloud-builders/kubectl'
+    args:
+      - set
+      - image
+      - deployment/mediapp-backend
+      - mediapp-backend=gcr.io/$Proyecto1-Java/mediapp-backend-spring-boot3:v$BUILD_ID
+    env:
+      - 'CLOUDSDK_COMPUTE_ZONE=us-central1-a'
+      - 'CLOUDSDK_CONTAINER_CLUSTER=spring-boot-cluster'
+images:
+  - 'gcr.io/$PROJECT_ID/mediapp-backend-spring-boot3:v$BUILD_ID'

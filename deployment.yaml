@@ -1,0 +1,26 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: mediapp-backend
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: mediapp-backend
+  template:
+    metadata:
+      labels:
+        app: mediapp-backend
+    spec:
+      containers:
+        - name: mediapp-backend
+          image: gcr.io/proyecto1-java/mediapp-backend-spring-boot3:v1
+          ports:
+            - containerPort: 8080
+          env:
+            - name: DATABASE_URL
+              value: jdbc:postgresql://postgres-service:5432/mediappbd
+            - name: DATABASE_USERNAME
+              value: postgres
+            - name: DATABASE_PASSWORD
+              value: bar2005XP
