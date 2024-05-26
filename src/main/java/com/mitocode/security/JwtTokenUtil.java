@@ -3,6 +3,7 @@ package com.mitocode.security;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.SignatureAlgorithm;
+import lombok.val;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -28,7 +29,7 @@ public class JwtTokenUtil implements Serializable {
     private String secret;
 
     public String generateToken(UserDetails userDetails){
-        Map<String, Object> claims = new HashMap<>();
+        var claims = new HashMap<String, Object>();
         claims.put("role", userDetails.getAuthorities().stream()
                                                        .map(GrantedAuthority::getAuthority)
                                                        .collect(Collectors.joining()));
@@ -56,7 +57,7 @@ public class JwtTokenUtil implements Serializable {
     }
 
     public <T> T getClaimFromToken(String token, Function<Claims, T> claimsResolver){
-        final Claims claims = getAllClaimsFromToken(token);
+        var claims = getAllClaimsFromToken(token);
         return claimsResolver.apply(claims);
     }
 
@@ -69,12 +70,12 @@ public class JwtTokenUtil implements Serializable {
     }
 
     private boolean isTokenExpired(String token){
-        final Date expiration = getExpirationDateFromToken(token);
+        var expiration = getExpirationDateFromToken(token);
         return expiration.before(new Date());
     }
 
     public boolean validateToken(String token, UserDetails userDetails){
-        final String username = getUsernameFromToken(token);
+        var username = getUsernameFromToken(token);
         return (username.equalsIgnoreCase(userDetails.getUsername()) && !isTokenExpired(token));
     }
 }

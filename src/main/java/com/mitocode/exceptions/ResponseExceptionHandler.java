@@ -1,6 +1,5 @@
 package com.mitocode.exceptions;
 
-import lombok.val;
 import org.springframework.http.*;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
@@ -18,7 +17,7 @@ public class ResponseExceptionHandler extends ResponseEntityExceptionHandler{
 
 	@ExceptionHandler(ModelNotFoundException.class)
     public ProblemDetail handleModelNotFoundException(ModelNotFoundException ex){
-        val problemDetail = ProblemDetail.forStatusAndDetail(HttpStatus.NOT_FOUND, ex.getMessage());
+        var problemDetail = ProblemDetail.forStatusAndDetail(HttpStatus.NOT_FOUND, ex.getMessage());
         problemDetail.setTitle("Model Not Found");
         problemDetail.setType(URI.create("/not-found"));
         return problemDetail;
@@ -36,25 +35,25 @@ public class ResponseExceptionHandler extends ResponseEntityExceptionHandler{
 
 	@ExceptionHandler(SQLException.class)
 	public ResponseEntity<CustomErrorResponse> handleSQLException(SQLException ex, WebRequest req){
-		val res = new CustomErrorResponse(LocalDateTime.now(), ex.getMessage(), req.getDescription(false));
+		var res = new CustomErrorResponse(LocalDateTime.now(), ex.getMessage(), req.getDescription(false));
 		return new ResponseEntity<>(res, HttpStatus.CONFLICT);
 	}
 
 	@Override
 	protected ResponseEntity<Object> handleMethodArgumentNotValid(MethodArgumentNotValidException ex, HttpHeaders headers,
 																  HttpStatusCode status, WebRequest request) {
-		val msg = ex.getBindingResult().getAllErrors()
+		var msg = ex.getBindingResult().getAllErrors()
 				.stream()
 				.map(e -> Objects.requireNonNull(e.getCode()).concat(":")
 						.concat(Objects.requireNonNull(e.getDefaultMessage())))
 				.collect(Collectors.joining());
-		val err = new CustomErrorResponse(LocalDateTime.now(), msg, request.getDescription(false));
+		var err = new CustomErrorResponse(LocalDateTime.now(), msg, request.getDescription(false));
 		return new ResponseEntity<>(err, HttpStatus.BAD_REQUEST);
 	}
 
 	@ExceptionHandler(Exception.class)
 	public ResponseEntity<CustomErrorResponse> handleAllException(ModelNotFoundException ex, WebRequest request) {
-		val err = new CustomErrorResponse(LocalDateTime.now(), ex.getMessage(), request.getDescription(false));
+		var err = new CustomErrorResponse(LocalDateTime.now(), ex.getMessage(), request.getDescription(false));
 		return new ResponseEntity<>(err, HttpStatus.INTERNAL_SERVER_ERROR);
 	}
 }

@@ -5,7 +5,6 @@ import com.mitocode.security.JwtResponse;
 import com.mitocode.security.JwtTokenUtil;
 import com.mitocode.security.JwtUserDetailsService;
 import lombok.RequiredArgsConstructor;
-import lombok.val;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.authentication.BadCredentialsException;
@@ -25,8 +24,8 @@ public class LoginController {
     @PostMapping("/login")
     public ResponseEntity<JwtResponse> login(@RequestBody JwtRequest req) throws Exception{
         authenticate(req.getUsername(), req.getPassword());
-        val userDetails = userDetailsService.loadUserByUsername(req.getUsername());
-        val token = jwtTokenUtil.generateToken(userDetails);
+        var userDetails = userDetailsService.loadUserByUsername(req.getUsername());
+        var token = jwtTokenUtil.generateToken(userDetails);
         return ResponseEntity.ok(new JwtResponse(token));
     }
 

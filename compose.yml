@@ -1,0 +1,28 @@
+version: "3.8"
+services:
+  #app:
+    #container_name: "mediapp-backend-spring-boot3"
+    #build: .
+    #ports:
+      #- "8080:8080"
+    #environment:
+      #- DATABASE_URL=jdbc:postgresql://postgres_db:5432/mediappbd
+      #- DATABASE_USERNAME=postgres
+      #- DATABASE_PASSWORD=bar2005XP
+    #depends_on:
+      #- postgres_db
+
+  postgres_db:
+    container_name: "postgres_db"
+    image: "postgres"
+    env_file: ./.env
+    ports:
+      - ${DB_LOCAL_PORT}:${DB_DOCKER_PORT}
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB}
+    volumes:
+      - postgres-data:${DB_VOLUME_URL}
+volumes:
+  postgres-data:
