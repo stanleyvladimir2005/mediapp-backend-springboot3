@@ -10,14 +10,15 @@ import java.net.URI;
 import java.sql.SQLException;
 import java.time.LocalDateTime;
 import java.util.Objects;
-import java.util.stream.Collectors;
+import static java.util.stream.Collectors.joining;
+import static org.springframework.http.HttpStatus.*;
 
 @ControllerAdvice
 public class ResponseExceptionHandler extends ResponseEntityExceptionHandler{
 
 	@ExceptionHandler(ModelNotFoundException.class)
     public ProblemDetail handleModelNotFoundException(ModelNotFoundException ex){
-        var problemDetail = ProblemDetail.forStatusAndDetail(HttpStatus.NOT_FOUND, ex.getMessage());
+        var problemDetail = ProblemDetail.forStatusAndDetail(NOT_FOUND, ex.getMessage());
         problemDetail.setTitle("Model Not Found");
         problemDetail.setType(URI.create("/not-found"));
         return problemDetail;
@@ -36,7 +37,7 @@ public class ResponseExceptionHandler extends ResponseEntityExceptionHandler{
 	@ExceptionHandler(SQLException.class)
 	public ResponseEntity<CustomErrorResponse> handleSQLException(SQLException ex, WebRequest req){
 		var res = new CustomErrorResponse(LocalDateTime.now(), ex.getMessage(), req.getDescription(false));
-		return new ResponseEntity<>(res, HttpStatus.CONFLICT);
+		return new ResponseEntity<>(res, CONFLICT);
 	}
 
 	@Override
@@ -46,14 +47,14 @@ public class ResponseExceptionHandler extends ResponseEntityExceptionHandler{
 				.stream()
 				.map(e -> Objects.requireNonNull(e.getCode()).concat(":")
 						.concat(Objects.requireNonNull(e.getDefaultMessage())))
-				.collect(Collectors.joining());
+				.collect(joining());
 		var err = new CustomErrorResponse(LocalDateTime.now(), msg, request.getDescription(false));
-		return new ResponseEntity<>(err, HttpStatus.BAD_REQUEST);
+		return new ResponseEntity<>(err, BAD_REQUEST);
 	}
 
 	@ExceptionHandler(Exception.class)
 	public ResponseEntity<CustomErrorResponse> handleAllException(ModelNotFoundException ex, WebRequest request) {
 		var err = new CustomErrorResponse(LocalDateTime.now(), ex.getMessage(), request.getDescription(false));
-		return new ResponseEntity<>(err, HttpStatus.INTERNAL_SERVER_ERROR);
+		return new ResponseEntity<>(err, INTERNAL_SERVER_ERROR);
 	}
 }

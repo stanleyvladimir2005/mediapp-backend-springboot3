@@ -10,15 +10,15 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.hateoas.EntityModel;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import java.util.List;
-import java.util.stream.Collectors;
+import static java.util.stream.Collectors.toList;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 import static org.springframework.http.HttpStatus.OK;
+import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
 @RestController
 @RequestMapping("/v1/sings")
@@ -30,13 +30,13 @@ public class SingController {
 	@Autowired
 	private ModelMapper mapper;
 
-	@GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
+	@GetMapping(produces = APPLICATION_JSON_VALUE)
 	public ResponseEntity<List<SingDTO>> findAll() {
-		val sings =  service.findAll().stream().map(this::convertToDto).collect(Collectors.toList());
+		val sings =  service.findAll().stream().map(this::convertToDto).collect(toList());
 		return new ResponseEntity<>(sings, OK);
 	}
 		
-	@PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+	@PostMapping(consumes = APPLICATION_JSON_VALUE, produces = APPLICATION_JSON_VALUE)
 	public ResponseEntity<Object> save(@Valid @RequestBody SingDTO singDTO) {
 		val sing = service.save(convertToEntity(singDTO));
 		val location = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(sing.getIdSing()).toUri();
@@ -50,19 +50,19 @@ public class SingController {
 		return new ResponseEntity<>(convertToDto(cons),OK);
 	}
 
-	@DeleteMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
+	@DeleteMapping(value = "/{id}", produces = APPLICATION_JSON_VALUE)
 	public ResponseEntity<Void> delete(@PathVariable Integer id) {
 		service.delete(id);
 		return new ResponseEntity<>(OK);
 	}
 	
-	@GetMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
+	@GetMapping(value = "/{id}", produces = APPLICATION_JSON_VALUE)
 	public ResponseEntity<SingDTO> findById(@PathVariable("id") Integer id) {
 		val sing = service.findById(id);
 		return new ResponseEntity<>(this.convertToDto(sing), OK);
 	}
 	
-	@GetMapping(value="/pageable", produces = MediaType.APPLICATION_JSON_VALUE)
+	@GetMapping(value="/pageable", produces = APPLICATION_JSON_VALUE)
 	public ResponseEntity<Page<SingDTO>> listPageable(Pageable pageable) {
 		val singDTO  = service.listPageable(pageable).map(this::convertToDto);
 		return new ResponseEntity<>(singDTO, OK);

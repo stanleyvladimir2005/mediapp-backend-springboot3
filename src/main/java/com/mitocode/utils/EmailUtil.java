@@ -9,7 +9,8 @@ import org.springframework.mail.javamail.MimeMessageHelper;
 import org.springframework.stereotype.Component;
 import org.thymeleaf.context.Context;
 import org.thymeleaf.spring6.SpringTemplateEngine;
-import java.nio.charset.StandardCharsets;
+import static java.nio.charset.StandardCharsets.UTF_8;
+import static org.springframework.mail.javamail.MimeMessageHelper.MULTIPART_MODE_MIXED_RELATED;
 
 @Component
 @RequiredArgsConstructor
@@ -21,7 +22,7 @@ public class EmailUtil {
 	
 	public void sendMail(Mail mail) throws MessagingException {
 		val message = emailSender.createMimeMessage();
-		val helper = new MimeMessageHelper(message, MimeMessageHelper.MULTIPART_MODE_MIXED_RELATED, StandardCharsets.UTF_8.name());
+		val helper = new MimeMessageHelper(message, MULTIPART_MODE_MIXED_RELATED, UTF_8.name());
 		val context = new Context(); //Establece variables de la plantilla
 		context.setVariables(mail.getModel());
 		val html = templateEngine.process("email/email-template", context);

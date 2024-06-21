@@ -57,10 +57,8 @@ public class MailController {
         try {
             if (random != null && !random.isEmpty()) {
                 val rm = resetMailService.findByRandom(random);
-                if (rm != null && rm.getId() > 0) {
-                    if (!rm.isExpired())
-                        rpta = 1;
-                }
+                if (rm != null && rm.getId() > 0 && !rm.isExpired())
+                    rpta = 1;
             }
         } catch (Exception e) {
             return new ResponseEntity<>(rpta, HttpStatus.INTERNAL_SERVER_ERROR);
@@ -72,11 +70,9 @@ public class MailController {
     public ResponseEntity<Object> resetPassword(@PathVariable("random") String random, @RequestBody String password) {
         try {
             val rm = resetMailService.findByRandom(random);
-            if (rm != null && rm.getId() > 0) {
-                if (!rm.isExpired()) {
-                    loginService.changePassword(password, rm.getUser().getUsername());
-                    resetMailService.delete(rm);
-                }
+            if (rm != null && rm.getId() > 0 && !rm.isExpired()) {
+                loginService.changePassword(password, rm.getUser().getUsername());
+                resetMailService.delete(rm);
             }
         } catch (Exception e) {
             return new ResponseEntity<>(HttpStatus.INTERNAL_SERVER_ERROR);

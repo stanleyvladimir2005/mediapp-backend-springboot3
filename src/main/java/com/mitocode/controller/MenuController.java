@@ -13,7 +13,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 import java.util.ArrayList;
 import java.util.List;
-import java.util.stream.Collectors;
+import static java.util.stream.Collectors.toList;
 
 @RestController
 @RequestMapping("/menus")
@@ -24,12 +24,13 @@ public class MenuController {
     private final IMenuService service;
 
     @PostMapping("/user")
-    public ResponseEntity<List<MenuDTO>> getMenusByUser(@RequestBody String username) throws Exception {
+    public ResponseEntity<List<MenuDTO>> getMenusByUser(@RequestBody String username) {
         val menus = service.getMenusByUsername(username);
-        val menusDTO = menus.stream().map(m -> {
-            m.setRoles(new ArrayList<>()); //Necesario por nativeQuery y devuelve PersistenBag
-            return modelMapper.map(m, MenuDTO.class);
-        }).collect(Collectors.toList());
+        val menusDTO = menus.stream()
+                .map(m -> {
+                    m.setRoles(new ArrayList<>()); //Necesario por nativeQuery y devuelve PersistenBag
+                    return modelMapper.map(m, MenuDTO.class);
+                }).collect(toList());
         return new ResponseEntity<>(menusDTO, HttpStatus.OK);
     }
 }

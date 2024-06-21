@@ -16,7 +16,6 @@ public class MenuServiceImpl extends CRUDImpl<Menu, Integer> implements IMenuSer
     @Autowired
     private IMenuRepo repo;
 
-
     @Override
     public List<Menu> getMenusByUsername(String username) {
         //Para obtener el usuario de la session de spring security

@@ -2,8 +2,6 @@ package com.mitocode.security;
 
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
-import io.jsonwebtoken.SignatureAlgorithm;
-import lombok.val;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
@@ -16,7 +14,8 @@ import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.function.Function;
-import java.util.stream.Collectors;
+import static io.jsonwebtoken.SignatureAlgorithm.HS512;
+import static java.util.stream.Collectors.joining;
 
 //Clase S1
 @Component
@@ -32,7 +31,7 @@ public class JwtTokenUtil implements Serializable {
         var claims = new HashMap<String, Object>();
         claims.put("role", userDetails.getAuthorities().stream()
                                                        .map(GrantedAuthority::getAuthority)
-                                                       .collect(Collectors.joining()));
+                                                       .collect(joining()));
         claims.put("test", "value test");
         return doGenerateToken(claims, userDetails.getUsername());
     }
@@ -48,7 +47,7 @@ public class JwtTokenUtil implements Serializable {
     }
 
     private Key getSigningKey() {
-        return new SecretKeySpec(Base64.getDecoder().decode(secret), SignatureAlgorithm.HS512.getJcaName());
+        return new SecretKeySpec(Base64.getDecoder().decode(secret), HS512.getJcaName());
     }
 
     //utils

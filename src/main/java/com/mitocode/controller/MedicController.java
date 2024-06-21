@@ -9,16 +9,16 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.hateoas.EntityModel;
+import static java.util.stream.Collectors.toList;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.linkTo;
 import static org.springframework.http.HttpStatus.OK;
-import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 import jakarta.validation.Valid;
 import java.util.List;
-import java.util.stream.Collectors;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
+import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
 @RestController
 @RequestMapping("/v1/medics")
@@ -31,13 +31,13 @@ public class MedicController {
 	private ModelMapper mapper;
 
 	//@PreAuthorize("@authServiceImpl.hasAccess('findAll')")
-	@GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
+	@GetMapping(produces = APPLICATION_JSON_VALUE)
 	public ResponseEntity<List<MedicDTO>> findAll() {
-		val medics = service.findAll().stream().map(this::convertToDto).collect(Collectors.toList());
+		val medics = service.findAll().stream().map(this::convertToDto).collect(toList());
 		return new ResponseEntity<>(medics, OK);
 	}
 	
-	@PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+	@PostMapping(consumes = APPLICATION_JSON_VALUE, produces = APPLICATION_JSON_VALUE)
 	public ResponseEntity<Object> save (@Valid @RequestBody MedicDTO medicDTO) {
 		val med = service.save(convertToEntity(medicDTO));
 		val location = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(med.getIdMedic()).toUri();
@@ -51,19 +51,19 @@ public class MedicController {
 		return new ResponseEntity<>(convertToDto(med),OK);
 	}
 
-	@DeleteMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
+	@DeleteMapping(value = "/{id}", produces = APPLICATION_JSON_VALUE)
 	public ResponseEntity<Void> delete(@PathVariable Integer id) {
 		service.delete(id);
 		return new ResponseEntity<>(OK);
 	}
 	
-	@GetMapping(value = "/{id}", produces = MediaType.APPLICATION_JSON_VALUE)
+	@GetMapping(value = "/{id}", produces = APPLICATION_JSON_VALUE)
 	public ResponseEntity<MedicDTO> findById(@PathVariable("id") Integer id) {
 		val medic = service.findById(id);
 		return new ResponseEntity<>(this.convertToDto(medic), OK);
 	}
 	
-	@GetMapping(value="/pageableMedic", produces = MediaType.APPLICATION_JSON_VALUE)
+	@GetMapping(value="/pageableMedic", produces = APPLICATION_JSON_VALUE)
 	public ResponseEntity<Page<MedicDTO>> listPageable(Pageable pageable) {
 		val medicDTO = service.listPageable(pageable).map(this::convertToDto);
 		return new ResponseEntity<>(medicDTO,OK);

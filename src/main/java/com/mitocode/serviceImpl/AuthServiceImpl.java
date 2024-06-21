@@ -5,7 +5,6 @@ import lombok.val;
 import org.springframework.security.core.GrantedAuthority;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
-
 import java.util.Arrays;
 
 @Slf4j
@@ -13,8 +12,7 @@ import java.util.Arrays;
 public class AuthServiceImpl { //Para uso de acceso usando @PreAuthorize
 
     public boolean hasAccess(String path){
-        boolean rpta = false;
-
+        var rpta = false;
         val methodRole = switch (path) {
             case "findAll" -> "ADMIN";
             case "findById" -> "USER,DBA";
