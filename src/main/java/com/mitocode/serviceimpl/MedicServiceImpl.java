@@ -1,17 +1,17 @@
-package com.mitocode.serviceImpl;
+package com.mitocode.serviceimpl;
 
 import com.mitocode.model.Medic;
 import com.mitocode.repo.IGenericRepo;
 import com.mitocode.repo.IMedicRepo;
 import com.mitocode.service.IMedicService;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 @Service
+@RequiredArgsConstructor
 public class MedicServiceImpl extends CRUDImpl<Medic, Integer>implements IMedicService {
 
-	@Autowired
-	private IMedicRepo repo;
+	private final IMedicRepo repo;
 
 	@Override
 	protected IGenericRepo<Medic, Integer> getRepo() {

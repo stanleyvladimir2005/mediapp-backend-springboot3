@@ -28,14 +28,12 @@ public class JwtRequestFilter extends OncePerRequestFilter {
         String username = null;
         String jwtToken = null;
 
-        if(header != null){
-            if (header.startsWith("Bearer ") || header.startsWith("bearer ")) {
-                jwtToken = header.substring(7);
-                try{
-                    username = jwtTokenUtil.getUsernameFromToken(jwtToken);
-                }catch (Exception ex){
-                    request.setAttribute("exception", ex.getMessage());
-                }
+        if (header != null && (header.startsWith("Bearer ") || header.startsWith("bearer "))) {
+            jwtToken = header.substring(7);
+            try {
+                username = jwtTokenUtil.getUsernameFromToken(jwtToken);
+            } catch (Exception ex) {
+                request.setAttribute("exception", ex.getMessage());
             }
         }
 

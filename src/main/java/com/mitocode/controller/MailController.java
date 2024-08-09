@@ -18,7 +18,6 @@ import java.util.UUID;
 @RequestMapping("/mail")
 @RequiredArgsConstructor
 public class MailController {
-
     private final ILoginService loginService;
     private final IResetMailService resetMailService;
     private final EmailUtil emailUtil;

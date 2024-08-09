@@ -1,4 +1,4 @@
-package com.mitocode.serviceImpl;
+package com.mitocode.serviceimpl;
 
 import com.mitocode.model.ResetMail;
 import com.mitocode.repo.IResetMailRepo;

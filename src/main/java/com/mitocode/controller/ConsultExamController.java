@@ -2,10 +2,10 @@ package com.mitocode.controller;
 
 import com.mitocode.dto.ConsultExamDTO;
 import com.mitocode.service.IConsultExamService;
+import lombok.RequiredArgsConstructor;
 import lombok.val;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.TypeToken;
-import org.springframework.beans.factory.annotation.Autowired;
 import static org.springframework.http.HttpStatus.OK;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -15,15 +15,12 @@ import org.springframework.web.bind.annotation.RestController;
 import java.util.List;
 
 @RestController
+@RequiredArgsConstructor
 @RequestMapping("/v1/consult-exam")
 public class ConsultExamController {
+	private final IConsultExamService service;
+	private final ModelMapper mapper;
 
-	@Autowired
-	private IConsultExamService service;
-
-	@Autowired
-	private ModelMapper mapper;
-	
 	@GetMapping(value = "/{idConsult}")
 	public ResponseEntity<List<ConsultExamDTO>> getConsultsById(@PathVariable("idConsult") Integer idConsult) {
 		val consultaExamen = service.listExamByConsult(idConsult);

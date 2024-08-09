@@ -1,17 +1,17 @@
-package com.mitocode.serviceImpl;
+package com.mitocode.serviceimpl;
 
 import com.mitocode.model.Sing;
 import com.mitocode.repo.IGenericRepo;
 import com.mitocode.repo.ISingRepo;
 import com.mitocode.service.ISingService;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 @Service
+@RequiredArgsConstructor
 public class SingServiceImpl extends CRUDImpl<Sing, Integer> implements ISingService {
 
-    @Autowired
-    private ISingRepo repo;
+    private final ISingRepo repo;
 
     @Override
     protected IGenericRepo<Sing, Integer> getRepo() {

@@ -1,4 +1,4 @@
-package com.mitocode.serviceImpl;
+package com.mitocode.serviceimpl;
 
 import com.mitocode.dto.ConsultProductDTO;
 import com.mitocode.model.Consult;
@@ -8,25 +8,22 @@ import com.mitocode.repo.IConsultRepo;
 import com.mitocode.repo.IGenericRepo;
 import com.mitocode.service.IConsultService;
 import jakarta.transaction.Transactional;
+import lombok.RequiredArgsConstructor;
 import lombok.val;
 import net.sf.jasperreports.engine.JasperExportManager;
 import net.sf.jasperreports.engine.JasperFillManager;
 import net.sf.jasperreports.engine.data.JRBeanCollectionDataSource;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.stereotype.Service;
 import java.time.LocalDateTime;
 import java.util.List;
-import java.util.stream.Collectors;
 
 @Service
+@RequiredArgsConstructor
 public class ConsultServiceImpl extends CRUDImpl<Consult,Integer>  implements IConsultService {
 
-	@Autowired
-	private IConsultRepo repo;
-
-	@Autowired
-	private IConsultExamRepo ceRepo;
+	private final IConsultRepo repo;
+	private final IConsultExamRepo ceRepo;
 
 	@Override
 	protected IGenericRepo<Consult, Integer> getRepo() {
@@ -60,17 +57,15 @@ public class ConsultServiceImpl extends CRUDImpl<Consult,Integer>  implements IC
 					cr.setConsultdate(String.valueOf(x[1]));
 					return cr;
 				})
-				.collect(Collectors.toList());
+				.toList();
 	}
 
 	@Override
-	public byte[] generateReport() {
-		byte[] data = null;
-		try {
-			val file = new ClassPathResource("/reports/consultas.jasper").getFile();
-			val print = JasperFillManager.fillReport(file.getPath(), null, new JRBeanCollectionDataSource(this.callProcedureOrFunction()));
-			data = JasperExportManager.exportReportToPdf(print);
-		}catch(Exception ignored) {	}
-		return data;
+	public byte[] generateReport() throws Exception {
+		byte[] data;
+        val file = new ClassPathResource("/reports/consultas.jasper").getFile();
+        val print = JasperFillManager.fillReport(file.getPath(), null, new JRBeanCollectionDataSource(this.callProcedureOrFunction()));
+        data = JasperExportManager.exportReportToPdf(print);
+        return data;
 	}
 }

@@ -22,20 +22,20 @@ public class LoginController {
     private final JwtUserDetailsService userDetailsService;
 
     @PostMapping("/login")
-    public ResponseEntity<JwtResponse> login(@RequestBody JwtRequest req) throws Exception{
+    public ResponseEntity<JwtResponse> login(@RequestBody JwtRequest req) {
         authenticate(req.getUsername(), req.getPassword());
         var userDetails = userDetailsService.loadUserByUsername(req.getUsername());
         var token = jwtTokenUtil.generateToken(userDetails);
         return ResponseEntity.ok(new JwtResponse(token));
     }
 
-    private void authenticate(String username, String password) throws Exception {
+    private void authenticate(String username, String password) {
        try {
             authenticationManager.authenticate(new UsernamePasswordAuthenticationToken(username, password));
         } catch (DisabledException e) {
-            throw new Exception("USER_DISABLED", e);
+            throw new DisabledException("USER_DISABLED", e);
         } catch (BadCredentialsException e) {
-            throw new Exception("INVALID_CREDENTIALS", e);
+            throw new BadCredentialsException("INVALID_CREDENTIALS", e);
         }
     }
 }

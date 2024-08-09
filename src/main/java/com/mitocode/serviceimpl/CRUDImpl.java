@@ -1,4 +1,4 @@
-package com.mitocode.serviceImpl;
+package com.mitocode.serviceimpl;
 
 import com.mitocode.exceptions.ModelNotFoundException;
 import com.mitocode.repo.IGenericRepo;
@@ -10,13 +10,14 @@ import java.util.List;
 public abstract class CRUDImpl<T,ID> implements ICRUD<T, ID> {
 	
 	protected abstract IGenericRepo<T, ID> getRepo();
+	private static final String NOT_FOUND = "ID NOT FOUND: ";
 
 	public T save(T t){
 		return getRepo().save(t);		
 	}
 
 	public T update(T t, ID id){
- 		getRepo().findById(id).orElseThrow(() -> new ModelNotFoundException("ID NOT FOUND: "+id));
+ 		getRepo().findById(id).orElseThrow(() -> new ModelNotFoundException(NOT_FOUND+id));
 		return getRepo().save(t);
 	}
 	
@@ -25,11 +26,11 @@ public abstract class CRUDImpl<T,ID> implements ICRUD<T, ID> {
 	}
 
 	public T findById(ID id) {
-		return getRepo().findById(id).orElseThrow(() -> new ModelNotFoundException("ID NOT FOUND: "+id));
+		return getRepo().findById(id).orElseThrow(() -> new ModelNotFoundException(NOT_FOUND+id));
 	}
 	
 	public void delete(ID id) {
-		getRepo().findById(id).orElseThrow(() -> new ModelNotFoundException("ID NOT FOUND: "+id));
+		getRepo().findById(id).orElseThrow(() -> new ModelNotFoundException(NOT_FOUND+id));
 		getRepo().deleteById(id);
 	}
 	

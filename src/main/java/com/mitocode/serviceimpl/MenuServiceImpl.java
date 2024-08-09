@@ -1,20 +1,20 @@
-package com.mitocode.serviceImpl;
+package com.mitocode.serviceimpl;
 
 import com.mitocode.model.Menu;
 import com.mitocode.repo.IGenericRepo;
 import com.mitocode.repo.IMenuRepo;
 import com.mitocode.service.IMenuService;
+import lombok.RequiredArgsConstructor;
 import lombok.val;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import java.util.List;
 
 @Service
+@RequiredArgsConstructor
 public class MenuServiceImpl extends CRUDImpl<Menu, Integer> implements IMenuService {
 
-    @Autowired
-    private IMenuRepo repo;
+    private final IMenuRepo repo;
 
     @Override
     public List<Menu> getMenusByUsername(String username) {

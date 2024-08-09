@@ -4,9 +4,9 @@ import com.mitocode.dto.PatientDTO;
 import com.mitocode.model.Patient;
 import com.mitocode.service.IPatientService;
 import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
 import lombok.val;
 import org.modelmapper.ModelMapper;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.hateoas.EntityModel;
@@ -21,14 +21,11 @@ import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
 @RestController
+@RequiredArgsConstructor
 @RequestMapping("/v1/patients")
 public class PatientController {
-	
-	@Autowired
-	private IPatientService service;
-
-	@Autowired
-	private ModelMapper mapper;
+	private final IPatientService service;
+	private final ModelMapper mapper;
 
 	@GetMapping(produces = APPLICATION_JSON_VALUE)
 	public ResponseEntity<List<PatientDTO>> findAll() {

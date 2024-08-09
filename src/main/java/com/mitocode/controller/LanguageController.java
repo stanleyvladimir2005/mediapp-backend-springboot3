@@ -2,8 +2,8 @@ package com.mitocode.controller;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
+import lombok.AllArgsConstructor;
 import lombok.val;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -14,17 +14,12 @@ import org.springframework.web.servlet.LocaleResolver;
 import static java.util.Locale.*;
 
 @RestController
+@AllArgsConstructor
 @RequestMapping("/languages")
 public class LanguageController {
-
-    @Autowired
-    private LocaleResolver localeResolver;
-
-    @Autowired
-    private HttpServletRequest httpServletRequest;
-
-    @Autowired
-    private HttpServletResponse httpServletResponse;
+    private final LocaleResolver localeResolver;
+    private final HttpServletRequest httpServletRequest;
+    private final HttpServletResponse httpServletResponse;
 
     @GetMapping("/locale/{loc}")
     public ResponseEntity<Void> changeLocale(@PathVariable("loc") String loc) {
@@ -33,7 +28,6 @@ public class LanguageController {
             case "fr" -> FRENCH;
             default -> ROOT;
         };
-
         localeResolver.setLocale(httpServletRequest, httpServletResponse, userLocale);
         return new ResponseEntity<>(HttpStatus.OK);
     }

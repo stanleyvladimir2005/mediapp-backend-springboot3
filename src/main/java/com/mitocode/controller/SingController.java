@@ -4,9 +4,9 @@ import com.mitocode.dto.SingDTO;
 import com.mitocode.model.Sing;
 import com.mitocode.service.ISingService;
 import jakarta.validation.Valid;
+import lombok.RequiredArgsConstructor;
 import lombok.val;
 import org.modelmapper.ModelMapper;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.hateoas.EntityModel;
@@ -21,14 +21,11 @@ import static org.springframework.http.HttpStatus.OK;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
 @RestController
+@RequiredArgsConstructor
 @RequestMapping("/v1/sings")
 public class SingController {
-	
-	@Autowired
-	private ISingService service;
-
-	@Autowired
-	private ModelMapper mapper;
+	private final ISingService service;
+	private final ModelMapper mapper;
 
 	@GetMapping(produces = APPLICATION_JSON_VALUE)
 	public ResponseEntity<List<SingDTO>> findAll() {

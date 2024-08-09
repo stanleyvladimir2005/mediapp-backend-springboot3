@@ -1,17 +1,17 @@
-package com.mitocode.serviceImpl;
+package com.mitocode.serviceimpl;
 
 import com.mitocode.model.Patient;
 import com.mitocode.repo.IGenericRepo;
 import com.mitocode.repo.IPatientRepo;
 import com.mitocode.service.IPatientService;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 @Service
+@RequiredArgsConstructor
 public class PatientServiceImpl extends CRUDImpl<Patient, Integer> implements IPatientService {
 
-	@Autowired
-	private IPatientRepo repo;
+	private final IPatientRepo repo;
 
 	@Override
 	protected IGenericRepo<Patient, Integer> getRepo() {

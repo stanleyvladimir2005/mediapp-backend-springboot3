@@ -19,7 +19,6 @@ import static java.util.stream.Collectors.toList;
 @RequestMapping("/menus")
 @RequiredArgsConstructor
 public class MenuController {
-
     private final ModelMapper modelMapper;
     private final IMenuService service;
 

@@ -3,9 +3,9 @@ package com.mitocode.controller;
 import com.mitocode.dto.SpecialtyDTO;
 import com.mitocode.model.Specialty;
 import com.mitocode.service.ISpecialtyService;
+import lombok.RequiredArgsConstructor;
 import lombok.val;
 import org.modelmapper.ModelMapper;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.hateoas.EntityModel;
@@ -21,14 +21,11 @@ import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
 @RestController
+@RequiredArgsConstructor
 @RequestMapping("/v1/specialtys")
 public class SpecialtyController {
-	
-	@Autowired
-	private ISpecialtyService service;
-
-	@Autowired
-	private ModelMapper mapper;
+	private final ISpecialtyService service;
+	private final ModelMapper mapper;
 
 	@GetMapping(produces = APPLICATION_JSON_VALUE)
 	public ResponseEntity<List<SpecialtyDTO>> findAll() {
@@ -37,8 +34,8 @@ public class SpecialtyController {
 	}
 		
 	@PostMapping(consumes = APPLICATION_JSON_VALUE, produces = APPLICATION_JSON_VALUE)
-	public ResponseEntity<Object> save(@Valid @RequestBody SpecialtyDTO SpecialtyDTO) {
-		val esp = service.save(convertToEntity(SpecialtyDTO));
+	public ResponseEntity<Object> save(@Valid @RequestBody SpecialtyDTO dto) {
+		val esp = service.save(convertToEntity(dto));
 		val location = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(esp.getIdSpecialty()).toUri();
 		return ResponseEntity.created(location).build();
 	}

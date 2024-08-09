@@ -21,7 +21,6 @@ import static java.util.stream.Collectors.joining;
 @Component
 public class JwtTokenUtil implements Serializable {
 
-    //milisegundos
     public final long JWT_TOKEN_VALIDITY = 5L * 60 * 60 * 1000;//5 horas
 
     @Value("${jwt.secret}") //EL Expression Language
@@ -29,9 +28,7 @@ public class JwtTokenUtil implements Serializable {
 
     public String generateToken(UserDetails userDetails){
         var claims = new HashMap<String, Object>();
-        claims.put("role", userDetails.getAuthorities().stream()
-                                                       .map(GrantedAuthority::getAuthority)
-                                                       .collect(joining()));
+        claims.put("role", userDetails.getAuthorities().stream().map(GrantedAuthority::getAuthority).collect(joining()));
         claims.put("test", "value test");
         return doGenerateToken(claims, userDetails.getUsername());
     }
@@ -50,7 +47,6 @@ public class JwtTokenUtil implements Serializable {
         return new SecretKeySpec(Base64.getDecoder().decode(secret), HS512.getJcaName());
     }
 
-    //utils
     public Claims getAllClaimsFromToken(String token){
         return Jwts.parserBuilder().setSigningKey(getSigningKey()).build().parseClaimsJws(token).getBody();
     }

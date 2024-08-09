@@ -1,17 +1,17 @@
-package com.mitocode.serviceImpl;
+package com.mitocode.serviceimpl;
 
 import com.mitocode.model.Exam;
 import com.mitocode.repo.IExamRepo;
 import com.mitocode.repo.IGenericRepo;
 import com.mitocode.service.IExamService;
-import org.springframework.beans.factory.annotation.Autowired;
+import lombok.RequiredArgsConstructor;
 import org.springframework.stereotype.Service;
 
 @Service
+@RequiredArgsConstructor
 public class ExamServiceImpl extends CRUDImpl<Exam, Integer> implements IExamService {
 
-	@Autowired
-	private IExamRepo repo;
+	private final IExamRepo repo;
 
 	@Override
 	protected IGenericRepo<Exam, Integer> getRepo() {

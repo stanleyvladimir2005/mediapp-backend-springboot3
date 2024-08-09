@@ -3,9 +3,9 @@ package com.mitocode.controller;
 import com.mitocode.dto.MedicDTO;
 import com.mitocode.model.Medic;
 import com.mitocode.service.IMedicService;
+import lombok.RequiredArgsConstructor;
 import lombok.val;
 import org.modelmapper.ModelMapper;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.hateoas.EntityModel;
@@ -21,14 +21,11 @@ import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 import static org.springframework.http.MediaType.APPLICATION_JSON_VALUE;
 
 @RestController
+@RequiredArgsConstructor
 @RequestMapping("/v1/medics")
 public class MedicController {
-	
-	@Autowired
-	private IMedicService service;
-
-	@Autowired
-	private ModelMapper mapper;
+	private final IMedicService service;
+	private final ModelMapper mapper;
 
 	//@PreAuthorize("@authServiceImpl.hasAccess('findAll')")
 	@GetMapping(produces = APPLICATION_JSON_VALUE)

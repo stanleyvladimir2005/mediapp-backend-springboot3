@@ -6,10 +6,10 @@ import com.mitocode.model.Exam;
 import com.mitocode.model.MediaFile;
 import com.mitocode.service.IMediaFileService;
 import com.mitocode.service.IConsultService;
+import lombok.RequiredArgsConstructor;
 import lombok.val;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.TypeToken;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import static java.util.stream.Collectors.toList;
@@ -27,17 +27,12 @@ import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 import static org.springframework.http.MediaType.*;
 
 @RestController
+@RequiredArgsConstructor
 @RequestMapping("/v1/consults")
 public class ConsultController {
-	
-	@Autowired
-	private IConsultService service;
-	
-	@Autowired
-	private IMediaFileService mediaFileService;
-
-	@Autowired
-	private ModelMapper mapper;
+	private final IConsultService service;
+	private final IMediaFileService mediaFileService;
+	private final ModelMapper mapper;
 
 	@GetMapping(produces = APPLICATION_JSON_VALUE)
 	public ResponseEntity<List<ConsultDTO>> findAll() {

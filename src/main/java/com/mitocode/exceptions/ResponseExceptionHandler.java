@@ -24,16 +24,6 @@ public class ResponseExceptionHandler extends ResponseEntityExceptionHandler{
         return problemDetail;
     }
 
-    /*	@ExceptionHandler(ModelNotFoundException.class) //Esta version equivale  pero sin problemDetail
-	public ErrorResponse handleModelNotFoundException(ModelNotFoundException ex, WebRequest req){
-		return ErrorResponse.builder(ex, HttpStatus.NOT_FOUND, ex.getMessage())
-				.title("Model not found")
-				.type(URI.create(req.getContextPath()))
-				.property("test", "value-test")
-				.property("age", 32)
-				.build();
-	}*/
-
 	@ExceptionHandler(SQLException.class)
 	public ResponseEntity<CustomErrorResponse> handleSQLException(SQLException ex, WebRequest req){
 		var res = new CustomErrorResponse(LocalDateTime.now(), ex.getMessage(), req.getDescription(false));

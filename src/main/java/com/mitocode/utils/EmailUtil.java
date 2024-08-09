@@ -15,15 +15,13 @@ import static org.springframework.mail.javamail.MimeMessageHelper.MULTIPART_MODE
 @Component
 @RequiredArgsConstructor
 public class EmailUtil {
-	
 	private final JavaMailSender emailSender;
-	
 	private final SpringTemplateEngine templateEngine;
 	
 	public void sendMail(Mail mail) throws MessagingException {
 		val message = emailSender.createMimeMessage();
 		val helper = new MimeMessageHelper(message, MULTIPART_MODE_MIXED_RELATED, UTF_8.name());
-		val context = new Context(); //Establece variables de la plantilla
+		val context = new Context();
 		context.setVariables(mail.getModel());
 		val html = templateEngine.process("email/email-template", context);
 		helper.setTo(mail.getTo());

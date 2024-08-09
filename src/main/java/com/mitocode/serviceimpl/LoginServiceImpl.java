@@ -1,4 +1,4 @@
-package com.mitocode.serviceImpl;
+package com.mitocode.serviceimpl;
 
 import com.mitocode.model.User;
 import com.mitocode.repo.ILoginRepo;
@@ -12,7 +12,6 @@ import org.springframework.stereotype.Service;
 public class LoginServiceImpl implements ILoginService{
 
     private final PasswordEncoder bcrypt;
-
     private final ILoginRepo repo;
 
     @Override

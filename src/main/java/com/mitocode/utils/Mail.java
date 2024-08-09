@@ -9,7 +9,6 @@ import java.util.Map;
 @AllArgsConstructor
 @NoArgsConstructor
 public class Mail {
-
 	private String from;
 	private String to;
 	private String subject;

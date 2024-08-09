@@ -1,4 +1,4 @@
-package com.mitocode.serviceImpl;
+package com.mitocode.serviceimpl;
 
 import lombok.extern.slf4j.Slf4j;
 import lombok.val;

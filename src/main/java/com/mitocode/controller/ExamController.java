@@ -3,9 +3,9 @@ package com.mitocode.controller;
 import com.mitocode.dto.ExamDTO;
 import com.mitocode.model.Exam;
 import com.mitocode.service.IExamService;
+import lombok.RequiredArgsConstructor;
 import lombok.val;
 import org.modelmapper.ModelMapper;
-import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.hateoas.EntityModel;
@@ -21,14 +21,11 @@ import java.util.List;
 import static org.springframework.hateoas.server.mvc.WebMvcLinkBuilder.methodOn;
 
 @RestController
+@RequiredArgsConstructor
 @RequestMapping("/v1/exams")
 public class ExamController {
-	
-	@Autowired
-	private IExamService service;
-
-	@Autowired
-	private ModelMapper mapper;
+	private final IExamService service;
+	private final ModelMapper mapper;
 
 	@GetMapping(produces = MediaType.APPLICATION_JSON_VALUE)
 	public ResponseEntity<List<ExamDTO>> findAll() {
