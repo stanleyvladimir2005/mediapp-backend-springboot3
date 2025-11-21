@@ -1,8 +1,7 @@
 plugins {
     id 'java'
-    id 'org.springframework.boot' version '3.5.7'
+    id 'org.springframework.boot' version '3.5.8'
     id 'io.spring.dependency-management' version '1.1.7'
-    id 'org.hibernate.orm' version '6.6.15.Final'
 }
 
 group = 'com.mitocode'
@@ -13,6 +12,7 @@ java {
         languageVersion = JavaLanguageVersion.of(25)
     }
 }
+
 
 repositories {
     mavenCentral()
@@ -42,10 +42,4 @@ dependencies {
 
 tasks.named('test') {
     useJUnitPlatform()
-}
-
-hibernate {
-    enhancement {
-        enableAssociationManagement = true
-    }
 }
