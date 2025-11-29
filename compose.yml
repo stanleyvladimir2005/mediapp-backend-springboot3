@@ -1,7 +1,7 @@
 version: "3.9"
 services:
   app:
-    container_name: "mediapp-backend-spring-boot3"
+    container_name: "mediapp-backend-spring-boot4"
     build: .
     ports:
       - "8080:8080"

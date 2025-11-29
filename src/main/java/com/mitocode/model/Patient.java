@@ -5,16 +5,12 @@ import jakarta.validation.constraints.Email;
 import jakarta.validation.constraints.Size;
 import lombok.Data;
 import lombok.EqualsAndHashCode;
-import org.hibernate.annotations.SQLDelete;
-import org.hibernate.annotations.Where;
 
 import java.util.List;
 
 @Data
 @Entity
 @Table(name ="patient")
-@SQLDelete(sql = "UPDATE patient SET status = false WHERE id_patient = ?")
-@Where(clause = "status = true")
 @EqualsAndHashCode(onlyExplicitlyIncluded = true)
 public class Patient {
 

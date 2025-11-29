@@ -9,7 +9,6 @@ import lombok.RequiredArgsConstructor;
 import lombok.val;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;
-import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.security.web.authentication.WebAuthenticationDetailsSource;
 import org.springframework.stereotype.Component;
 import org.springframework.web.filter.OncePerRequestFilter;
@@ -22,7 +21,8 @@ public class JwtRequestFilter extends OncePerRequestFilter {
     private final JwtTokenUtil jwtTokenUtil;
 
     @Override
-    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response,
+    protected void doFilterInternal(HttpServletRequest request,
+                                    HttpServletResponse response,
                                     FilterChain filterChain) throws ServletException, IOException {
         val header = request.getHeader("Authorization");
         String username = null;
@@ -38,7 +38,7 @@ public class JwtRequestFilter extends OncePerRequestFilter {
         }
 
         if (username != null) {
-            UserDetails userDetails = this.jwtUserDetailsService.loadUserByUsername(username);
+            var userDetails = this.jwtUserDetailsService.loadUserByUsername(username);
             if (jwtTokenUtil.validateToken(jwtToken, userDetails)) {
                 var userPassAuthToken = new UsernamePasswordAuthenticationToken(userDetails, null, userDetails.getAuthorities());
                 userPassAuthToken.setDetails(new WebAuthenticationDetailsSource().buildDetails(request));
