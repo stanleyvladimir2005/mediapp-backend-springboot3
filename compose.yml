@@ -14,7 +14,7 @@ services:
 
   postgres_db:
     container_name: "postgres_db"
-    image: "postgres"
+    image: "postgres:17-alpine"
     env_file: ./.env
     ports:
       - ${DB_LOCAL_PORT}:${DB_DOCKER_PORT}
